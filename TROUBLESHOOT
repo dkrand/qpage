@@ -1,0 +1,61 @@
+
+If you have trouble getting QuickPage to work, please try the following
+suggestions.  These are the most common problems people have reported.
+
+  - If you are using Solaris 2.x, make sure you DO NOT have /usr/ucb in
+    your PATH when compiling.  This does evil things.  If qpage submits
+    jobs into the page queue but they are never processed, this is the
+    problem.  Take /usr/ucb out of your PATH, type "make clean", and
+    then type "make" to rebuild qpage.
+
+  - Many paging services require that error correction be turned off on
+    your modem.  Typically this can be done by including something like
+    &A0&K0&M0 in your modem's initialization command.  If your modem
+    dials the paging service but fails to connect, this is most likely
+    the problem.  Also note that the IXO/TAP specification recommends a
+    connection speed of 300 baud when troubleshooting.
+
+  - Do not confuse your pager's touch-tone phone number with your paging
+    service's IXO/TAP phone number.  They are never the same.
+
+  - QuickPage expects verbal result codes from the modem.  Make sure
+    your modem is programmed to use verbal result codes (ATV1) and not
+    numeric result codes.  QuickPage also expects that the modem will
+    echo commands (ATE1).
+
+  - The QuickPage daemon process requires root permission in order to
+    open the SNPP socket (port 444 by default).  However, since most
+    people believe processes should only have superuser power when they
+    absolutely need it, QuickPage gives up its root permissions
+    immediately after opening the socket.  Therefore, it is important
+    to make sure the DAEMON_USER you specify in the config.input
+    file has the privileges necessary to create/remove files in both
+    the page queue (the queuedir option in qpage.cf) and in the lock
+    directory.  The daemon will also require read/write access to all
+    specified modem devices (obviously).
+
+  - Examine the output of "qpage -i -d -p <pagerid> <message>" to see
+    if there are any obvious problems.  This will run QuickPage in
+    interactive mode, without using any of the networking or queue
+    processing code.  This command must be run on the machine which has
+    the modem connected to it.  Once you get that working you can
+    enable debug output in the daemon (i.e. "qpage -d -q10") for
+    further troubleshooting.
+
+  - Does "tip" work?  Try using a utility such as "tip" or "cu" to dial
+    your paging service.  Make sure you're using the same baud rate and
+    parity that QuickPage is using.  When your modem connects to the
+    remote end, press RETURN a few times until you see the "ID=" login
+    prompt.  If you can't make this work manually, QuickPage doesn't
+    stand a chance.
+
+Finally, if all else fails and you still can't make it work, please
+send me some e-mail containing the output of "qpage -i -d ..." (or
+whatever you feel is relevant to your problem) and I'll try my best
+to help.
+
+
+Good luck,
+Tom.III
+tomiii@qpage.org
+http://www.qpage.org/

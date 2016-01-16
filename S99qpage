@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+# Startup for QuickPage
+#
+
+PATH=/usr/bin:/usr/local/bin
+
+case "$1" in
+	start)
+		echo "Starting QuickPage daemon" > /dev/console 2>&1
+		qpage -q10 > /dev/console 2>&1 &
+		;;
+
+	stop)
+		pid=`ps -e | grep qpage | awk '{print $1}'`
+		if [ ! -z "$pid" ]; then
+			echo "Stopping QuickPage daemon" > /dev/console 2>&1
+			kill $pid > /dev/null 2>&1
+		fi
+		;;
+
+	*)
+		echo "Usage: /etc/init.d/qpage { start | stop }"
+		;;
+
+esac
+exit 0

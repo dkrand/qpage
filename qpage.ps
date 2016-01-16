@@ -1,0 +1,1376 @@
+%!PS
+%%Version: 3.15
+%%DocumentFonts: (atend)
+%%Pages: (atend)
+%%EndComments
+%ident	"@(#)lp:filter/postscript/postscript/dpost.ps	1.1"
+%
+% Version 3.16 prologue for troff files.
+%
+
+/#copies 1 store
+/aspectratio 1 def
+/formsperpage 1 def
+/landscape false def
+/linewidth .3 def
+/magnification 1 def
+/margin 0 def
+/orientation 0 def
+/resolution 720 def
+/xoffset 0 def
+/yoffset 0 def
+
+/roundpage true def
+/useclippath true def
+/pagebbox [0 0 612 792] def
+
+/R  /Times-Roman def
+/I  /Times-Italic def
+/B  /Times-Bold def
+/BI /Times-BoldItalic def
+/H  /Helvetica def
+/HI /Helvetica-Oblique def
+/HB /Helvetica-Bold def
+/HX /Helvetica-BoldOblique def
+/CW /Courier def
+/CO /Courier def
+/CI /Courier-Oblique def
+/CB /Courier-Bold def
+/CX /Courier-BoldOblique def
+/PA /Palatino-Roman def
+/PI /Palatino-Italic def
+/PB /Palatino-Bold def
+/PX /Palatino-BoldItalic def
+/Hr /Helvetica-Narrow def
+/Hi /Helvetica-Narrow-Oblique def
+/Hb /Helvetica-Narrow-Bold def
+/Hx /Helvetica-Narrow-BoldOblique def
+/KR /Bookman-Light def
+/KI /Bookman-LightItalic def
+/KB /Bookman-Demi def
+/KX /Bookman-DemiItalic def
+/AR /AvantGarde-Book def
+/AI /AvantGarde-BookOblique def
+/AB /AvantGarde-Demi def
+/AX /AvantGarde-DemiOblique def
+/NR /NewCenturySchlbk-Roman def
+/NI /NewCenturySchlbk-Italic def
+/NB /NewCenturySchlbk-Bold def
+/NX /NewCenturySchlbk-BoldItalic def
+/ZD /ZapfDingbats def
+/ZI /ZapfChancery-MediumItalic def
+/VR /Varitimes#Roman def
+/VI /Varitimes#Italic def
+/VB /Varitimes#Bold def
+/VX /Varitimes#BoldItalic def
+/S  /S def
+/S1 /S1 def
+/GR /Symbol def
+
+/inch {72 mul} bind def
+/min {2 copy gt {exch} if pop} bind def
+
+/setup {
+	counttomark 2 idiv {def} repeat pop
+
+	landscape {/orientation 90 orientation add def} if
+	/scaling 72 resolution div def
+	linewidth setlinewidth
+	1 setlinecap
+
+	pagedimensions
+	xcenter ycenter translate
+	orientation neg rotate
+	width 2 div neg height 2 div translate
+	xoffset inch yoffset inch translate
+	margin 2 div dup neg translate
+	magnification dup aspectratio mul scale
+	scaling scaling scale
+
+	/Symbol /S Sdefs cf
+	/Times-Roman /S1 S1defs cf
+	0 0 moveto
+} def
+
+/pagedimensions {
+	useclippath userdict /gotpagebbox known not and {
+		/pagebbox [clippath pathbbox newpath] def
+		roundpage currentdict /roundpagebbox known and {roundpagebbox} if
+	} if
+	pagebbox aload pop
+	4 -1 roll exch 4 1 roll 4 copy
+	landscape {4 2 roll} if
+	sub /width exch def
+	sub /height exch def
+	add 2 div /xcenter exch def
+	add 2 div /ycenter exch def
+	userdict /gotpagebbox true put
+} def
+
+/pagesetup {
+	/page exch def
+	currentdict /pagedict known currentdict page known and {
+		page load pagedict exch get cvx exec
+	} if
+} def
+
+/decodingdefs [
+	{counttomark 2 idiv {y moveto show} repeat}
+	{neg /y exch def counttomark 2 idiv {y moveto show} repeat}
+	{neg moveto {2 index stringwidth pop sub exch div 0 32 4 -1 roll widthshow} repeat}
+	{neg moveto {spacewidth sub 0.0 32 4 -1 roll widthshow} repeat}
+	{counttomark 2 idiv {y moveto show} repeat}
+	{neg setfunnytext}
+] def
+
+/setdecoding {/t decodingdefs 3 -1 roll get bind def} bind def
+
+/w {neg moveto show} bind def
+/m {neg dup /y exch def moveto} bind def
+/done {/lastpage where {pop lastpage} if} def
+
+/f {
+	dup /font exch def findfont exch
+	dup /ptsize exch def scaling div dup /size exch def scalefont setfont
+	linewidth ptsize mul scaling 10 mul div setlinewidth
+	/spacewidth ( ) stringwidth pop def
+} bind def
+
+/changefont {
+	/fontheight exch def
+	/fontslant exch def
+	currentfont [
+		1 0
+		fontheight ptsize div fontslant sin mul fontslant cos div
+		fontheight ptsize div
+		0 0
+	] makefont setfont
+} bind def
+
+/sf {f} bind def
+
+/cf {
+	dup length 2 idiv
+	/entries exch def
+	/chtab exch def
+	/newfont exch def
+
+	findfont dup length 1 add dict
+	/newdict exch def
+	{1 index /FID ne {newdict 3 1 roll put} {pop pop} ifelse} forall
+
+	newdict /Metrics entries dict put
+	newdict /Metrics get
+	begin
+		chtab aload pop
+		1 1 entries {pop def} for
+		newfont newdict definefont pop
+	end
+} bind def
+
+%
+% A few arrays used to adjust reference points and character widths in some
+% of the printer resident fonts. If square roots are too high try changing
+% the lines describing /radical and /radicalex to,
+%
+%	/radical	[0 -75 550 0]
+%	/radicalex	[-50 -75 500 0]
+%
+
+/Sdefs [
+	/bracketlefttp		[220 500]
+	/bracketleftbt		[220 500]
+	/bracketrighttp		[-70 380]
+	/bracketrightbt		[-70 380]
+	/braceleftbt		[220 490]
+	/bracketrightex		[220 -125 500 0]
+	/radical		[0 0 550 0]
+	% NeWSprint's \(br is too low, compensate
+	statusdict /product get (NeWS Server) eq {
+		/radicalex		[-50 100 500 0]
+		/parenleftex		[-20 100 0 0]
+
+	} {
+		/radicalex		[-50 0 500 0]
+		/parenleftex		[-20 -170 0 0]
+	} ifelse
+	/integral		[100 -50 500 0]
+	/infinity		[10 -75 730 0]
+] def
+
+/S1defs [
+	/underscore		[0 80 500 0]
+	/endash			[7 90 650 0]
+] def
+%%EndProlog
+%%BeginSetup
+mark
+/resolution 720 def
+setup
+2 setdecoding
+%%EndSetup
+%%Page: 1 1
+save
+mark
+1 pagesetup
+10 R f
+( \( 1 \))3 164( qpage)1 3839(User Commands)1 677 3 720 480 t
+9 B f
+(NAME)720 960 w
+10 R f
+(qpage)1080 1080 w
+10 S1 f
+(\261)1351 1080 w
+10 R f
+(SNPP client/server for sending messages to an alpha-numeric pager)8 2770 1 1449 1080 t
+9 B f
+(SYNOPSIS)720 1248 w
+10 B f
+(qpage)1080 1368 w
+10 R f
+([)1373 1368 w
+10 S1 f
+(\261)1443 1368 w
+10 B f
+(dhimQv)1508 1368 w
+10 R f
+(] [)1 103 1 1896 1368 t
+10 S1 f
+(\261)2036 1368 w
+10 B f
+(a)2101 1368 w
+10 I f
+([+][dd+]hhmm)2188 1368 w
+10 S f
+(\372)2861 1368 w
+10 S1 f
+(\261)2948 1368 w
+10 B f
+(a)3013 1368 w
+10 I f
+(YYMMDDHHMMSS)3100 1368 w
+10 R f
+(] [)1 103 1 3969 1368 t
+10 S1 f
+(\261)4110 1368 w
+10 B f
+(c)4175 1368 w
+10 I f
+(coverage)4257 1368 w
+10 R f
+(] [)1 104 1 4660 1368 t
+10 S1 f
+(\261)4802 1368 w
+10 B f
+(f)4867 1368 w
+10 I f
+(from)4938 1368 w
+10 R f
+(] [)1 104 1 5165 1368 t
+10 S1 f
+(\261)5307 1368 w
+10 B f
+(l)5372 1368 w
+10 I f
+(level)1080 1488 w
+10 R f
+(] [)1 99 1 1301 1488 t
+10 S1 f
+(\261)1433 1488 w
+10 B f
+(p)1498 1488 w
+10 I f
+(pagerid)1587 1488 w
+10 R f
+(] [)1 99 1 1931 1488 t
+10 S1 f
+(\261)2063 1488 w
+10 B f
+(P)2128 1488 w
+10 I f
+(pagerid)2222 1488 w
+10 R f
+(] [)1 99 1 2566 1488 t
+10 S1 f
+(\261)2698 1488 w
+10 B f
+(s)2763 1488 w
+10 I f
+(server)2835 1488 w
+10 R f
+(] [)1 99 1 3117 1488 t
+10 I f
+(message)3249 1488 w
+10 R f
+(])3620 1488 w
+10 B f
+(qpage)1080 1656 w
+10 R f
+([)1369 1656 w
+10 S1 f
+(\261)1435 1656 w
+10 B f
+(d)1500 1656 w
+10 R f
+(] [)1 99 1 1589 1656 t
+10 S1 f
+(\261)1721 1656 w
+10 B f
+(C)1786 1656 w
+10 I f
+(con\256g)1891 1656 w
+10 R f
+(])2168 1656 w
+10 S1 f
+(\261)2234 1656 w
+10 B f
+(q)2299 1656 w
+10 I f
+(interval)2388 1656 w
+9 B f
+(DESCRIPTION)720 1824 w
+10 B f
+(QuickPage)1080 1944 w
+10 R f
+( known as TAP\) proto-)4 977(sends messages to a paging terminal using the SNPP and IXO \(also)11 2838 2 1585 1944 t
+( than a recipient and the message text, in which case the)11 2355( is normally used with no options other)7 1648(cols. It)1 317 3 1080 2064 t
+( to a page queue to be sent by a separate dae-)11 1940(message is sent to the SNPP server where it is submitted)10 2380 2 1080 2184 t
+( noti\256cation messages indicating the)4 1487( Status)1 311( supported.)1 452( groups and duty schedules are)5 1273( Page)1 261(mon process.)1 536 6 1080 2304 t
+(success or failure of a page are sent via e-mail to submitters of high-priority \(level 0\) pages.)16 3795 1 1080 2424 t
+( Characters)1 498( the user is prompted for the message text.)8 1801(If no message is speci\256ed on the command line,)8 2021 3 1080 2592 t
+( EOF is received.)3 732(are read from standard input until a line containing only a period is received, or until)15 3588 2 1080 2712 t
+(All occurrences of whitespace within the message text are reduced to a single space character.)14 3864 1 1080 2832 t
+(Messages received by the)3 1109 1 1080 3000 t
+10 B f
+(QuickPage)2243 3000 w
+10 R f
+(daemon that are longer than the maximum page length \(see)9 2635 1 2765 3000 t
+( message segment is pre\256xed)4 1229( Each)1 273( pages.)1 293(below\) are split into multiple segments and sent as separate)9 2525 4 1080 3120 t
+( maximum number of segments a into which a message will be split is)13 3028( The)1 230(with its segment number.)3 1062 3 1080 3240 t
+( last allowed segment will be pre\256xed with 't', indicat-)9 2273( a message exceeds this limit, the)6 1389(con\256gurable. If)1 658 3 1080 3360 t
+(ing that the message is truncated; otherwise, the last segment is pre\256xed with 'e' to indicate the end of)18 4320 1 1080 3480 t
+( message)1 375( All)1 198( single page are not pre\256xed with segment numbers.)8 2179( that \256t into a)4 586( Messages)1 459(the message.)1 523 6 1080 3600 t
+(segments are pre\256xed with CALLerid information \(see RFC-1861\), if available.)9 3270 1 1080 3720 t
+9 B f
+(OPTIONS)720 3888 w
+10 R f
+(The following options are supported:)4 1514 1 1080 4008 t
+10 S1 f
+(\261)1080 4176 w
+10 B f
+(a)1145 4176 w
+10 R f
+( plus sign \(+\) is added)5 941( time speci\256cation pre\256xed with a)5 1407( A)1 140(Send the page at the speci\256ed time.)6 1472 4 1440 4176 t
+( The)1 227(to the current time.)3 802 2 1440 4296 t
+10 B f
+(QuickPage)2508 4296 w
+10 R f
+( newer)1 281(daemon will not send any pages with a timestamp)8 2105 2 3014 4296 t
+( clock function for)3 791( feature may be used to provide a simple alarm)9 2015( This)1 252(than the current time.)3 902 4 1440 4416 t
+( option applies only to the pagerid\(s\) speci\256ed by the next)10 2550( This)1 259(meeting reminders, etc.)2 983 3 1440 4536 t
+10 S1 f
+(\261)5279 4536 w
+10 B f
+(p)5344 4536 w
+10 R f
+( YYMMDDHHMMSS, the two-digit year is inter-)6 2096( the speci\256ed time is in the format)7 1447(option. If)1 417 3 1440 4656 t
+( year are in the range 00-49 and the last)9 1675(preted as follows: if the last two digits of the speci\256ed)10 2285 2 1440 4776 t
+( in the next)3 498(two digits of the current year are in the range 50-99, assume the speci\256ed time is)15 3462 2 1440 4896 t
+( assume the speci\256ed time is in the current century.)9 2119(century. Otherwise)1 800 2 1440 5016 t
+10 S1 f
+(\261)1080 5184 w
+10 B f
+(c)1145 5184 w
+10 R f
+( the recipient has)3 721( option is only useful if)5 996( This)1 249(Use a different coverage area or paging service.)7 1994 4 1440 5184 t
+( and/or more than one paging service. This option applies only to the)12 3062(more than one pager)3 898 2 1440 5304 t
+(pagerid\(s\) speci\256ed by the next)4 1285 1 1440 5424 t
+10 S1 f
+(\261)2758 5424 w
+10 B f
+(p)2823 5424 w
+10 R f
+(option.)2912 5424 w
+10 S1 f
+(\261)1080 5592 w
+10 B f
+(C)1145 5592 w
+10 R f
+( option may only be used on the)7 1336( This)1 244(Specify an alternate con\256guration \256le.)4 1560 3 1440 5592 t
+10 B f
+(QuickPage)4613 5592 w
+10 R f
+(server.)5113 5592 w
+10 S1 f
+(\261)1080 5760 w
+10 B f
+(d)1145 5760 w
+10 R f
+( option is)2 411( This)1 255( interesting for the normal user.)5 1354( verbose and probably not)4 1109( Very)1 275(Debug mode.)1 556 6 1440 5760 t
+(provided for debugging purposes only.)4 1583 1 1440 5880 t
+10 S1 f
+(\261)1080 6048 w
+10 B f
+(f)1145 6048 w
+10 R f
+( option speci\256es the argument to the SNPP)7 1882( This)1 260(Specify who the page is from.)5 1318 3 1440 6048 t
+10 B f
+(CALLerid)4950 6048 w
+10 R f
+( message segment will be pre\256xed with the value speci\256ed by this option)12 3220(command. Every)1 740 2 1440 6168 t
+( null argument \()3 695( A)1 148(unless disabled by the msgpre\256x keyword in the con\256guration \256le.)9 2818 3 1440 6288 t
+10 S1 f
+(\261)5144 6288 w
+10 B f
+(f)5209 6288 w
+10 S1 f
+("")5285 6288 w
+10 R f
+(\))5367 6288 w
+( this will)2 385( However,)1 465( for a particular message.)4 1073(may be speci\256ed to suppress the message pre\256x)7 2037 4 1440 6408 t
+( default is the userid of the person running)8 1788( The)1 225( status noti\256cation.)2 783(also suppress e-mail)2 832 4 1440 6528 t
+10 B f
+(Quick-)5105 6528 w
+(Page.)1440 6648 w
+10 S1 f
+(\261)1080 6816 w
+10 B f
+(h)1145 6816 w
+10 R f
+( a brief summary of the command line options.)8 1937(Help. Print)1 480 2 1440 6816 t
+10 S1 f
+(\261)1080 6984 w
+10 B f
+(i)1145 6984 w
+10 R f
+( immediately and summary messages are printed during)7 2317( page is sent)3 524( The)1 224(Use interactive mode.)2 895 4 1440 6984 t
+( with a physically)3 762( option may only be used on a machine)8 1717( This)1 255(the course of the transaction.)4 1226 4 1440 7104 t
+( only and should not be used)6 1228( option is intended for debugging purposes)6 1788( This)1 249(attached modem.)1 695 4 1440 7224 t
+( 1)1 1888( change: 05/08/99)2 732( Last)1 1302(Thomas Dwyer III)2 758 4 720 7704 t
+cleartomark
+showpage
+restore
+%%EndPage: 1 1
+%%Page: 2 2
+save
+mark
+2 pagesetup
+10 R f
+( \( 1 \))3 164( qpage)1 3839(User Commands)1 677 3 720 480 t
+( The)1 222(in a production environment.)3 1187 2 1440 960 t
+10 S1 f
+(\261)2883 960 w
+10 B f
+(d)2948 960 w
+10 R f
+(option, when used in conjunction with this option, can be)9 2363 1 3037 960 t
+( in troubleshooting problems between the SNPP server and the remote paging ter-)12 3400(very effective)1 560 2 1440 1080 t
+(minal.)1440 1200 w
+10 S1 f
+(\261)1080 1368 w
+10 B f
+(l)1145 1368 w
+10 R f
+( 11,)1 163( service level must be a number between 0 and)9 1973( The)1 225(Specify the service level for this page.)6 1599 4 1440 1368 t
+( TME protocol speci\256es service level as follows:)7 2006(inclusive. The)1 607 2 1440 1488 t
+(0 - Priority)2 455 1 1800 1656 t
+(1 - Normal \(default\))3 830 1 1800 1776 t
+(2 - Five minutes)3 677 1 1800 1896 t
+(3 - Fifteen minutes)3 782 1 1800 2016 t
+(4 - One hour)3 531 1 1800 2136 t
+(5 - Four hours)3 593 1 1800 2256 t
+(6 - Twelve hours)3 703 1 1800 2376 t
+(7 - Twenty Four hours)4 931 1 1800 2496 t
+(8 - Carrier speci\256c '1')4 918 1 1800 2616 t
+(9 - Carrier speci\256c '2')4 918 1 1800 2736 t
+(10 - Carrier speci\256c '3')4 968 1 1800 2856 t
+(11 - Carrier speci\256c '4')4 968 1 1800 2976 t
+(With the exception of level zero, service levels have no meaning to)11 2892 1 1440 3144 t
+10 B f
+(QuickPage)4377 3144 w
+10 R f
+(but they are)2 511 1 4889 3144 t
+( the user is)3 511( service level speci\256ed by)4 1143( Any)1 258(accepted for compatibility with other programs.)5 2048 4 1440 3264 t
+( pages submitted with a service level of zero, the)9 2117( For)1 215(passed on to the SNPP server.)5 1289 3 1440 3384 t
+10 B f
+(Quick-)5105 3384 w
+(Page)1440 3504 w
+10 R f
+( the submitter notifying them whether the page)7 2013(daemon will send an e-mail message to)6 1696 2 1691 3504 t
+( option)1 307( This)1 262( to the paging service\) or failed.)6 1428(succeeded \(i.e. it was successfully transmitted)5 1963 4 1440 3624 t
+(applies only to the pagerid\(s\) speci\256ed by the next)8 2078 1 1440 3744 t
+10 S1 f
+(\261)3551 3744 w
+10 B f
+(p)3616 3744 w
+10 R f
+(option.)3705 3744 w
+10 S1 f
+(\261)1080 3912 w
+10 B f
+(m)1145 3912 w
+10 R f
+(This option tells)2 687 1 1440 3912 t
+10 B f
+(QuickPage)2170 3912 w
+10 R f
+( page is con-)3 564( A)1 149(to read an e-mail message from standard input.)7 2007 3 2680 3912 t
+( header \(YYY\), and lines from)5 1289(structed by concatenating the From: header \(XXX\), the Subject:)8 2671 2 1440 4032 t
+(the message body \(ZZZ\) as follows:)5 1485 1 1440 4152 t
+(XXX \(Subj: YYY\) ZZZ ...)4 1100 1 1800 4320 t
+( with a Content-Type:)3 907( \256rst part)2 377( The)1 221(Minimal support is provided for multipart MIME messages.)7 2455 4 1440 4488 t
+( will reduce the)3 678( This)1 256( remaining parts will be discarded.)5 1481( The)1 233( processed.)1 463(of text/plain will be)3 849 6 1440 4608 t
+(problems associated with people accidentally mailing binaries to their pagers.)9 3173 1 1440 4728 t
+( is a documented)3 725( MIME)1 347( supported and should not be used.)6 1487(The X-sun-attachment type is not)4 1401 4 1440 4896 t
+( However,)1 470( nor standard.)2 590( X-sun-attachment type is neither documented)5 1959(standard. The)1 599 4 1440 5016 t
+10 B f
+(Quick-)5105 5016 w
+(Page)1440 5136 w
+10 R f
+( lines \(but no message body\) from such messages for)9 2224(will still use the From: and Subject:)6 1495 2 1681 5136 t
+(those people who insist on using it anyway.)7 1800 1 1440 5256 t
+( body \(or in a MIME text part\) is assumed to)10 1877(A line starting with two dashes \(--\) in the message)9 2083 2 1440 5424 t
+(be the start of a signature and will cause)8 1722 1 1440 5544 t
+10 B f
+(QuickPage)3201 5544 w
+10 R f
+(to stop processing the e-mail message at)6 1693 1 3707 5544 t
+(that point.)1 414 1 1440 5664 t
+10 S1 f
+(\261)1080 5832 w
+10 B f
+(p)1145 5832 w
+10 R f
+( by separat-)2 495( recipients may be speci\256ed)4 1165( Multiple)1 417(Specify the pagerid of the intended recipient.)6 1883 4 1440 5832 t
+( spaces are permitted)3 905( No)1 202( \(e.g. pagerid1,pagerid2,pagerid3\).)2 1426(ing their pager IDs with commas)5 1427 4 1440 5952 t
+( Any)1 245( characters.)1 468(between recipients and the comma separator)5 1840 3 1440 6072 t
+10 S1 f
+(\261)4033 6072 w
+10 B f
+(a,)4098 6072 w
+10 S1 f
+(\261)4213 6072 w
+10 B f
+(c,)4278 6072 w
+10 R f
+(or)4387 6072 w
+10 S1 f
+(\261)4510 6072 w
+10 B f
+(l)4575 6072 w
+10 R f
+(options previously)1 757 1 4643 6072 t
+( option is processed.)3 846(encountered on the command line are reset to their default values after this)12 3114 2 1440 6192 t
+( multiple times on the command line, each possibly preceded by different)11 3034(This option may occur)3 926 2 1440 6312 t
+10 S1 f
+(\261)1440 6432 w
+10 B f
+(a,)1505 6432 w
+10 S1 f
+(\261)1613 6432 w
+10 B f
+(c,)1678 6432 w
+10 R f
+(or)1780 6432 w
+10 S1 f
+(\261)1896 6432 w
+10 B f
+(l)1961 6432 w
+10 R f
+(options.)2022 6432 w
+10 S1 f
+(\261)1080 6600 w
+10 B f
+(P)1145 6600 w
+10 R f
+(Like)1440 6600 w
+10 S1 f
+(\261)1656 6600 w
+10 B f
+(p)1721 6600 w
+10 R f
+(but does not reset)3 726 1 1810 6600 t
+10 S1 f
+(\261)2569 6600 w
+10 B f
+(a,)2634 6600 w
+10 S1 f
+(\261)2742 6600 w
+10 B f
+(c,)2807 6600 w
+10 R f
+(or)2909 6600 w
+10 S1 f
+(\261)3025 6600 w
+10 B f
+(l)3090 6600 w
+10 R f
+(options previously encountered on the command line.)6 2193 1 3151 6600 t
+10 S1 f
+(\261)1080 6768 w
+10 B f
+(q)1145 6768 w
+10 R f
+(Start a)1 266 1 1440 6768 t
+10 B f
+(QuickPage)1739 6768 w
+10 R f
+( option causes)2 582(daemon. This)1 585 2 2239 6768 t
+10 B f
+(QuickPage)3439 6768 w
+10 R f
+( from the controlling)3 857(to detach itself)2 604 2 3939 6768 t
+( the argu-)2 400( If)1 133( a numerical argument.)3 947( option requires)2 647( This)1 246(terminal and run as a daemon process.)6 1587 6 1440 6888 t
+( of seconds)2 479(ment is greater than zero, it speci\256es the number)8 2050 2 1440 7008 t
+10 B f
+(QuickPage)4009 7008 w
+10 R f
+(should sleep between)2 884 1 4516 7008 t
+( argument less than zero signals)5 1338( An)1 193(queue runs.)1 473 3 1440 7128 t
+10 B f
+(QuickPage)3482 7128 w
+10 R f
+(to accept incoming SNPP connec-)4 1413 1 3987 7128 t
+( An)1 213( never process the page queue.)5 1383(tions and write new pages to the page queue, but to)10 2364 3 1440 7248 t
+( 2)1 1888( change: 05/08/99)2 732( Last)1 1302(Thomas Dwyer III)2 758 4 720 7728 t
+cleartomark
+showpage
+restore
+%%EndPage: 2 2
+%%Page: 3 3
+save
+mark
+3 pagesetup
+10 R f
+( \( 1 \))3 164( qpage)1 3839(User Commands)1 677 3 720 480 t
+(argument of zero signals)3 1029 1 1440 960 t
+10 B f
+(QuickPage)2509 960 w
+10 R f
+( for incoming SNPP connections, but to pro-)7 1881(not to listen)2 503 2 3016 960 t
+( the NOTES section below for more informa-)7 1914( See)1 215(cess the page queue one time and then exit.)8 1831 3 1440 1080 t
+(tion.)1440 1200 w
+10 S1 f
+(\261)1080 1368 w
+10 B f
+(Q)1145 1368 w
+10 R f
+( option may only be used on the)7 1364( This)1 248( of the page queue.)4 804(Print the current contents)3 1040 4 1440 1368 t
+10 B f
+(QuickPage)4933 1368 w
+10 R f
+( invoked by root or DAEMONUSER, this option will probably fail because of)12 3344(server. Unless)1 616 2 1440 1488 t
+(insuf\256cient permissions.)1 986 1 1440 1608 t
+10 S1 f
+(\261)1080 1776 w
+10 B f
+(s)1145 1776 w
+10 R f
+( a client to contact a server)6 1141( hostnames used by)3 813( The)1 224(Specify the name\(s\) of the SNPP server\(s\).)6 1782 4 1440 1776 t
+(are determined by checking the following in this order:)8 2266 1 1440 1896 t
+(the)1800 2064 w
+10 S1 f
+(\261)1955 2064 w
+10 B f
+(s)2020 2064 w
+10 R f
+(option)2092 2064 w
+(the environment variable SNPP)3 1287 1 1800 2184 t
+10 S f
+(_)3087 2184 w
+10 R f
+(SERVER)3137 2184 w
+(the contents of the compiled in \256lename)6 1652 1 1800 2304 t
+(the compiled in hostname)3 1054 1 1800 2424 t
+( multiple servers are)3 890( If)1 150( them with commas.)3 889(Multiple hostnames are permitted by separating)5 2031 4 1440 2592 t
+(used, it is assumed that they all have identical copies of the con\256guration \256le.)13 3204 1 1440 2712 t
+10 S1 f
+(\261)1080 2880 w
+10 B f
+(v)1145 2880 w
+10 R f
+(Print the version of)3 793 1 1440 2880 t
+10 B f
+(QuickPage)2266 2880 w
+10 R f
+(and exit.)1 352 1 2766 2880 t
+(The)1080 3048 w
+10 B f
+(QuickPage)1273 3048 w
+10 R f
+( during startup and again)4 1049( \256le is read one time)5 878( This)1 249(server requires a con\256guration \256le.)4 1446 4 1778 3048 t
+( of major and minor keyword=value pairs.)6 1779( con\256guration \256le is made up)5 1249( The)1 229(upon receipt of SIGHUP.)3 1063 4 1080 3168 t
+( keywords must contain leading whitespace.)5 1809( Minor)1 317( a line.)2 287(Major keywords must start at the beginning of)7 1907 4 1080 3288 t
+( are permitted between the)4 1114( Spaces)1 349( with an equal sign \(=\).)5 997(All keywords must be immediately followed)5 1860 4 1080 3408 t
+( may appear in any order)5 1074( Keywords)1 484( value may not contain whitespace.)5 1483( The)1 229(equal sign and the value.)4 1050 5 1080 3528 t
+(with the following four exceptions:)4 1442 1 1080 3648 t
+(Minor keywords must be grouped together under their respective major keyword.)10 3332 1 1440 3816 t
+(Modems must be de\256ned before any services that reference them.)9 2693 1 1440 3984 t
+(Services must be de\256ned before any pagers that reference them.)9 2620 1 1440 4152 t
+(Pagers must be de\256ned before any groups that reference them.)9 2560 1 1440 4320 t
+(The major keywords are:)3 1024 1 1080 4488 t
+( e-mail address of the)4 1023(administrator The)1 905 2 1440 4656 t
+10 B f
+(QuickPage)3434 4656 w
+10 R f
+( de\256ned, e-mail)2 708(administrator. If)1 724 2 3968 4656 t
+( the)1 174(noti\256cation will be sent to)4 1157 2 2190 4776 t
+10 B f
+(QuickPage)3573 4776 w
+10 R f
+(administrator whenever a page)3 1308 1 4092 4776 t
+(fails \(i.e. when)2 633 1 2190 4896 t
+10 B f
+(maxtries)2868 4896 w
+10 R f
+( address is also used in)5 1018( This)1 257(has been exceeded\).)2 841 3 3284 4896 t
+( to users who sub-)4 787(the Reply-To: header for status noti\256cation messages sent)7 2423 2 2190 5016 t
+(mit high-priority pages.)2 963 1 2190 5136 t
+( false, or)2 362(forcehostname \(true,)1 963 2 1440 5304 t
+10 S1 f
+(@)2798 5304 w
+10 R f
+( be quali\256ed with a)4 802(mailhost\) Force the destination address to)5 1708 2 2890 5304 t
+( option can)2 482( This)1 256(hostname when sending e-mail status noti\256cation to users.)7 2472 3 2190 5424 t
+(be used when the)3 726 1 2190 5544 t
+10 B f
+(QuickPage)2954 5544 w
+10 R f
+(daemon is running on a machine that does not)8 1941 1 3459 5544 t
+( the value of this keyword)5 1145( If)1 145(handle unquali\256ed e-mail addresses correctly.)4 1920 3 2190 5664 t
+(starts with the ')3 667 1 2190 5784 t
+10 S1 f
+(@)2857 5784 w
+10 R f
+( be appended as-is to unquali\256ed e-mail)6 1694(' character, it will)3 757 2 2949 5784 t
+( the value of this keyword is)6 1252(addresses. If)1 552 2 2190 5904 t
+10 S1 f
+(")4039 5904 w
+10 R f
+(true)4080 5904 w
+10 S1 f
+(")4235 5904 w
+10 R f
+(then the submitter's host-)3 1079 1 4321 5904 t
+( default is false \(do not)5 1093( The)1 247(name will be appended to such addresses.)6 1870 3 2190 6024 t
+(append hostnames\).)1 801 1 2190 6144 t
+( before giving up on RFC-1413)5 1368( number of seconds to wait for a reply)8 1687(identtimeout The)1 905 3 1440 6312 t
+( ident functionality.)2 832( integer less than or equal to zero disables)8 1861(queries. An)1 517 3 2190 6432 t
+(The default is 10 seconds.)4 1072 1 2190 6552 t
+( present, this keyword speci\256es the name of another con\256guration \256le that)11 3144(include If)1 816 2 1440 6720 t
+( resumes after)2 577( of the current \256le)4 755( Processing)1 501(should be processed at this point.)5 1377 4 2190 6840 t
+(the speci\256ed \256le has been processed.)5 1659 1 2190 6960 t
+10 B f
+(QuickPage)3945 6960 w
+10 R f
+(makes no attempt to)3 925 1 4475 6960 t
+( keyword in multiple \256les that point)6 1500(prevent in\256nite recursion; do not use this)6 1710 2 2190 7080 t
+(at each other.)2 550 1 2190 7200 t
+( 3)1 1888( change: 05/08/99)2 732( Last)1 1302(Thomas Dwyer III)2 758 4 720 7680 t
+cleartomark
+showpage
+restore
+%%EndPage: 3 3
+%%Page: 4 4
+save
+mark
+4 pagesetup
+10 R f
+( \( 1 \))3 164( qpage)1 3839(User Commands)1 677 3 720 480 t
+( \256le into which the server should write its)8 1764( present, this keyword speci\256es a)5 1380(pid\256le If)1 816 3 1440 960 t
+( \256le is is not opened until after root permissions have been)11 2510( The)1 229(process ID.)1 471 3 2190 1080 t
+( \256le for writing \(or if the \256le)7 1268( DAEMONUSER cannot open the)4 1448(dropped. If)1 494 3 2190 1200 t
+( it\),)1 159(does not exist and DAEMONUSER does not have permission to create)10 3051 2 2190 1320 t
+(this keyword is silently ignored.)4 1318 1 2190 1440 t
+( \256le containing an alternate signature that)6 1749( present, this keyword speci\256es a)5 1395(sig\256le If)1 816 3 1440 1608 t
+10 B f
+(QuickPage)2190 1728 w
+10 R f
+( sent to page)3 535(should append to e-mail status noti\256cation messages)6 2171 2 2694 1728 t
+( sig\256le=/dev/null to suppress the signature completely.)6 2234(submitters. Use)1 663 2 2190 1848 t
+( pages.)1 295( or false\) Whether or not queue runs are synchronized with new)11 2727(synchronous \(true)1 938 3 1440 2016 t
+(If true, the submission of a new page initiates a queue run without waiting)13 3210 1 2190 2136 t
+(for the normal sleep counter \(set by the)7 1741 1 2190 2256 t
+10 S1 f
+(\261)3981 2256 w
+10 R f
+( is)1 118( false, the page)3 673( If)1 149(q option\).)1 414 4 4046 2256 t
+( server waits for the time remaining on the sleep counter \(if)11 2568(queued and the)2 642 2 2190 2376 t
+( default is true.)3 623( The)1 221(any\) before starting another queue run.)5 1591 3 2190 2496 t
+( the)1 156( keyword may be used to override)6 1406( This)1 244( location of the lock directory.)5 1249(lockdir The)1 905 5 1440 2664 t
+( rarely be necessary to)4 963( should)1 311( It)1 138(compiled in location of the lock directory.)6 1798 4 2190 2784 t
+(specify this keyword.)2 873 1 2190 2904 t
+( number of seconds to wait for an SNPP command before terminating the)12 3055(snpptimeout The)1 905 2 1440 3072 t
+( default is 60 seconds.)4 917(connection. The)1 684 2 2190 3192 t
+( is no default queue directory; this)6 1515( There)1 315( page queue.)2 551( location of the)3 674(queuedir The)1 905 5 1440 3360 t
+(option must be speci\256ed in the con\256guration \256le.)7 2017 1 2190 3480 t
+( argument to this keyword is the name)7 1627( The)1 227( a modem de\256nition.)3 870( start of)2 331(modem The)1 905 5 1440 3648 t
+( following minor key-)3 913( keyword has the)3 715( This)1 248(of a modem device \(e.g. hayes\).)5 1334 4 2190 3768 t
+(words:)2190 3888 w
+( text may)2 396( This)1 248( administrator.)1 595( text speci\256ed by the)4 871(text Optional)1 1100 5 2190 4056 t
+( underscores are con-)3 960( However,)1 485( whitespace.)1 530(not contain)1 485 4 2940 4176 t
+( spaces when the value of this keyword is read.)9 2086(verted to)1 374 2 2940 4296 t
+(This keyword is not interpreted by)5 1449 1 2940 4416 t
+10 B f
+(QuickPage)4428 4416 w
+10 R f
+( only)1 216(and is)1 250 2 4934 4416 t
+(provided for the administrator's convenience.)4 1853 1 2940 4536 t
+( the modem is physically connected)5 1484( name of the device)4 821(device The)1 905 3 2190 4704 t
+( is no default device; this)5 1162( There)1 322( as /dev/cua/a.)2 632(to, such)1 344 4 2940 4824 t
+(option must be speci\256ed in the con\256guration \256le.)7 2017 1 2940 4944 t
+( initializa-)1 419( The)1 224( modem.)1 361( initialization command for this)4 1301(initcmd The)1 905 5 2190 5112 t
+( with OK.)2 419(tion command must cause the modem to respond)7 2041 2 2940 5232 t
+(The default initialization command is ATZ.)5 1783 1 2940 5352 t
+( dial command)2 656( The)1 244( dial command for this modem.)5 1405(dialcmd The)1 905 4 2190 5520 t
+( The)1 242(speci\256ed here should not include a phone number.)7 2218 2 2940 5640 t
+(default dial command is ATDT.)4 1311 1 2940 5760 t
+( argument to this keyword is the)6 1354( The)1 224( of a paging service de\256nition.)5 1270( start)1 207(service The)1 905 5 1440 5928 t
+( a service named)3 709( If)1 138(name of the paging service.)4 1156 3 2190 6048 t
+10 B f
+(default)4232 6048 w
+10 R f
+( of)1 121(exists, the values)2 708 2 4571 6048 t
+( This)1 247( service de\256nitions.)2 802(its minor keywords are used as defaults for all other)9 2161 3 2190 6168 t
+(keyword has the following minor keywords:)5 1813 1 2190 6288 t
+( text may)2 396( This)1 248( administrator.)1 595( text speci\256ed by the)4 871(text Optional)1 1100 5 2190 6456 t
+( underscores are con-)3 960( However,)1 485( whitespace.)1 530(not contain)1 485 4 2940 6576 t
+( spaces when the value of this keyword is read.)9 2086(verted to)1 374 2 2940 6696 t
+(This keyword is not interpreted by)5 1449 1 2940 6816 t
+10 B f
+(QuickPage)4428 6816 w
+10 R f
+( only)1 216(and is)1 250 2 4934 6816 t
+(provided for the administrator's convenience.)4 1853 1 2940 6936 t
+( Multiple)1 456( modem de\256nitions.)2 904( or more names of)4 934(device One)1 916 4 2190 7104 t
+( by separating them with)4 1236(modems may be speci\256ed)3 1224 2 2940 7224 t
+( 4)1 1888( change: 05/08/99)2 732( Last)1 1302(Thomas Dwyer III)2 758 4 720 7704 t
+cleartomark
+showpage
+restore
+%%EndPage: 4 4
+%%Page: 5 5
+save
+mark
+5 pagesetup
+10 R f
+( \( 1 \))3 164( qpage)1 3839(User Commands)1 677 3 720 480 t
+( queue run,)2 504( a)1 97(commas. During)1 727 3 2940 960 t
+10 B f
+(QuickPage)4322 960 w
+10 R f
+(will try each)2 557 1 4843 960 t
+( list until it \256nds one that can be opened suc-)10 1888(modem in the)2 572 2 2940 1080 t
+( user)1 209(cessfully \(i.e. it is not already being used by a dialin)10 2251 2 2940 1200 t
+( remaining modems in the)4 1108( The)1 229( process\).)1 398(or by some other)3 725 4 2940 1320 t
+( be ignored until the next queue run when the list)10 2139(list will)1 321 2 2940 1440 t
+( no event will)3 604( In)1 160(will be searched again.)3 971 3 2940 1560 t
+10 B f
+(QuickPage)4719 1560 w
+10 R f
+(ever)5229 1560 w
+( open at any given time; pages)6 1299(have more than one modem)4 1161 2 2940 1680 t
+( con-)1 258(queued for different services are not processed)6 2202 2 2940 1800 t
+( backward compatibility with previous)4 1811(currently. For)1 649 2 2940 1920 t
+( speci\256ed here.)2 673(releases, a physical device path may be)6 1787 2 2940 2040 t
+( releases.)1 403(However, this will not be supported in future)7 2057 2 2940 2160 t
+(Modem de\256nitions should be used instead.)5 1751 1 2940 2280 t
+( that the modem should use to)6 1398( The command)2 663(dialcmd [obsolete])1 1149 3 2190 2448 t
+( keyword is)2 532( This)1 269( paging service.)2 695(connect to the remote)3 964 4 2940 2568 t
+( and will not be sup-)5 934(accepted for backward compatibility)3 1526 2 2940 2688 t
+( keyword over-)2 649( speci\256ed, this)2 617( If)1 145(ported in future releases.)3 1049 4 2940 2808 t
+( all modem speci\256cations used)4 1263(rides the dialcmd keyword in)4 1197 2 2940 2928 t
+(by this service.)2 618 1 2940 3048 t
+( speci\256ed)1 409( The)1 242( the paging service.)3 863( phone number of)3 791(phone The)1 905 5 2190 3216 t
+( will be appended to the modem's dialcmd)7 1862(phone number)1 598 2 2940 3336 t
+(when calling the paging service.)4 1321 1 2940 3456 t
+( to use when logging into the remote paging)8 1888( password)1 417(password The)1 905 3 2190 3624 t
+( the password as an)4 836( IXO speci\256cation de\256nes)3 1088(service. The)1 536 3 2940 3744 t
+( paging)1 330( Most)1 297(optional six character alphanumeric string.)4 1833 3 2940 3864 t
+( do not require a password.)5 1216(services in the United States)4 1244 2 2940 3984 t
+(The default is an empty string \()6 1302 1 2940 4104 t
+10 S1 f
+("")4242 4104 w
+10 R f
+(\).)4324 4104 w
+( default)1 315( The)1 226( while talking to the modem.)5 1215( speed to use)3 549(baudrate The)1 905 5 2190 4272 t
+(is 300 baud.)2 502 1 2940 4392 t
+( the)1 162( parity to use \(even, odd, or none\) while talking to)10 2143(parity The)1 905 3 2190 4560 t
+( default is even.)3 656(modem. The)1 546 2 2940 4680 t
+( number of characters allowed in a single)7 1846( maximum)1 459(maxmsgsize The)1 905 3 2190 4848 t
+( the message pre\256x and 9)5 1067( size includes)2 562( This)1 248(page segment.)1 583 4 2940 4968 t
+( default is 80 characters.)4 1004( The)1 221(bytes of protocol overhead.)3 1116 3 2940 5088 t
+( of page segments to send when a)7 1500( maximum number)2 805(maxpages The)1 905 3 2190 5256 t
+(message exceeds)1 713 1 2940 5376 t
+10 B f
+(maxmsgsize.)3713 5376 w
+10 R f
+( of this option)3 661(The value)1 431 2 4308 5376 t
+( default is 9 page)4 734( The)1 226( 9, inclusive.)2 537(must be between 1 and)4 963 4 2940 5496 t
+(segments.)2940 5616 w
+( a page before giv-)4 795( number of times to attempt sending)6 1510(maxtries The)1 905 3 2190 5784 t
+( the modem is busy \(i.e. tip or cu is currently)10 2013( If)1 146(ing up.)1 301 3 2940 5904 t
+( or if the modem returns BUSY in response to the)10 2117(using it\))1 343 2 2940 6024 t
+( a)1 104( Thus)1 293(dial command, the counter is not incremented.)6 2063 3 2940 6144 t
+(busy service will cause)3 986 1 2940 6264 t
+10 B f
+(QuickPage)3973 6264 w
+10 R f
+(to retry the page for-)4 913 1 4487 6264 t
+( default is 6.)3 518(ever. The)1 417 2 2940 6384 t
+( use the)2 355( or false\) This keyword speci\256es whether to)7 1917(identfrom \(true)1 938 3 2190 6552 t
+( message pre\256x if no CALLerid SNPP)6 1598(ident response as the)3 862 2 2940 6672 t
+( default is true.)3 623( The)1 221(command is received.)2 889 3 2940 6792 t
+( false\) This keyword speci\256es whether the)6 1805( or)1 127(allowpid \(true)1 938 3 2190 6960 t
+10 B f
+(Quick-)5105 6960 w
+(Page)2940 7080 w
+10 R f
+(daemon will accept numeric pagerids for pagers not)7 2210 1 3190 7080 t
+( default service is)3 779( The)1 239( \256le.)1 204(speci\256ed in the con\256guration)3 1238 4 2940 7200 t
+( 5)1 1888( change: 05/08/99)2 732( Last)1 1302(Thomas Dwyer III)2 758 4 720 7680 t
+cleartomark
+showpage
+restore
+%%EndPage: 5 5
+%%Page: 6 6
+save
+mark
+6 pagesetup
+10 R f
+( \( 1 \))3 164( qpage)1 3839(User Commands)1 677 3 720 480 t
+( the user explicitly chooses a)5 1226(used for such pagerids unless)4 1234 2 2940 960 t
+( default for this keyword is false.)6 1365( The)1 221(different service.)1 683 3 2940 1080 t
+( prepend the sender's name \(the)5 1371( or false\) Whether to)4 901(msgpre\256x \(true)1 938 3 2190 1248 t
+(CALLerid information\) to the beginning of each page seg-)8 2460 1 2940 1368 t
+( keyword should be set to false for service)8 1965(ment. This)1 495 2 2940 1488 t
+( default for this)3 688( The)1 238(de\256nitions used for numeric pagers.)4 1534 3 2940 1608 t
+(keyword is true.)2 662 1 2940 1728 t
+( is the user-)3 529( argument to this keyword)4 1133( The)1 234( start of a pager de\256nition.)5 1159(pager The)1 905 5 1440 1896 t
+( username will be speci\256ed by the)6 1455( This)1 253(name associated with the pager.)4 1340 3 2190 2016 t
+10 S1 f
+(\261)5279 2016 w
+10 B f
+(p)5344 2016 w
+10 R f
+( when running)2 607(option on the command line)4 1178 2 2190 2136 t
+10 B f
+(QuickPage)4015 2136 w
+10 R f
+( This)1 251(in client mode.)2 627 2 4522 2136 t
+(keyword has the following minor keywords:)5 1813 1 2190 2256 t
+( text may)2 396( This)1 248( administrator.)1 595( text speci\256ed by the)4 871(text Optional)1 1100 5 2190 2424 t
+( underscores are con-)3 960( However,)1 485( whitespace.)1 530(not contain)1 485 4 2940 2544 t
+( spaces when the value of this keyword is read.)9 2086(verted to)1 374 2 2940 2664 t
+( be listed)2 397(Pager speci\256cations containing this keyword will)5 2063 2 2940 2784 t
+( the NOTES section)3 865( See)1 223( command.)1 465(by the XWHO SNPP)3 907 4 2940 2904 t
+(below for more information.)3 1161 1 2940 3024 t
+( paging service for this)4 1063( pagerid sent to the remote)5 1242(pagerid The)1 905 3 2190 3192 t
+(pager.)2940 3312 w
+( default service to use for this pager.)7 1508(service The)1 905 2 2190 3480 t
+( argument to this keyword is the name of)8 1717( The)1 223( of a group de\256nition.)4 909( start)1 206(group The)1 905 5 1440 3648 t
+( keyword has the following minor keywords:)6 1846( This)1 244(a new page group.)3 755 3 2190 3768 t
+( text may)2 396( This)1 248( administrator.)1 595( text speci\256ed by the)4 871(text Optional)1 1100 5 2190 3936 t
+( underscores are con-)3 960( However,)1 485( whitespace.)1 530(not contain)1 485 4 2940 4056 t
+( spaces when the value of this keyword is read.)9 2086(verted to)1 374 2 2940 4176 t
+( be listed)2 389(Group speci\256cations containing this keyword will)5 2071 2 2940 4296 t
+( the NOTES section)3 865( See)1 223( command.)1 465(by the XWHO SNPP)3 907 4 2940 4416 t
+(below for more information.)3 1161 1 2940 4536 t
+( have a valid)3 564( member must)2 608( The)1 231( member of this group.)4 985(member A)1 822 5 2190 4704 t
+10 B f
+(pager)2940 4824 w
+10 R f
+( optional duty)2 582( An)1 193(entry before this group de\256nition.)4 1402 3 3223 4824 t
+( keyword may)2 595( This)1 248(schedule \(see below\) may be speci\256ed.)5 1617 3 2940 4944 t
+(appear multiple times within a single group.)6 1811 1 2940 5064 t
+(The service named)2 789 1 1080 5232 t
+10 S1 f
+(")1912 5232 w
+10 R f
+(default)1953 5232 w
+10 S1 f
+(")2230 5232 w
+10 R f
+( in the con\256guration \256le\) and has the)7 1601(always exists \(even if not speci\256ed)5 1485 2 2314 5232 t
+( the default service may be rede\256ned in the con\256guration \256le if)11 2713( However,)1 466(default values listed above.)3 1141 3 1080 5352 t
+(desired.)1080 5472 w
+(Member de\256nitions within a page group have the syntax:)8 2345 1 1080 5640 t
+(member=name[/DayStart-End])1440 5808 w
+( the same syntax as)4 807( duty schedule has)3 759( The)1 221(Where the square brackets indicate an optional duty schedule.)8 2533 4 1080 5976 t
+(the)1080 6096 w
+10 B f
+(Time)1245 6096 w
+10 R f
+(parameter in the UUCP)3 994 1 1510 6096 t
+10 B f
+(Systems)2547 6096 w
+10 R f
+(\256le:)2934 6096 w
+10 B f
+(Day)3166 6096 w
+10 R f
+( weekday abbreviations)2 976(is a list of case-sensitive)4 1043 2 3381 6096 t
+(\(e.g. MoTuTh\),)1 629 1 1080 6216 t
+10 B f
+(Start)1742 6216 w
+10 R f
+(is the start time \(e.g. 800\), and)6 1272 1 1991 6216 t
+10 B f
+(End)3297 6216 w
+10 R f
+( word)1 239( The)1 222(is the end time \(e.g. 1700\).)5 1116 3 3510 6216 t
+10 B f
+(Any)5121 6216 w
+10 R f
+(is)5333 6216 w
+(synonymous with)1 732 1 1080 6336 t
+10 B f
+(SuMoTuWeThFrSa.)1860 6336 w
+10 R f
+( time)1 225( The)1 235(Midnight may be represented as either 0 or 2400.)8 2150 3 2790 6336 t
+( duty schedule from the)4 1067( slash is required to separate the)6 1455( A)1 160(range must not span across midnight.)5 1638 4 1080 6456 t
+( member de\256nitions for the same person with different duty schedules are per-)12 3295( Multiple)1 417(member name.)1 608 3 1080 6576 t
+( will)1 200( duty schedules for the same person within a group)9 2195( Overlapping)1 575(mitted \(see the example below\).)4 1350 4 1080 6696 t
+( the following example con\256guration \256le:)5 1703( See)1 210(not cause duplicate pages to be sent to that person.)9 2091 3 1080 6816 t
+10 S1 f
+(#)1440 7056 w
+(#)1440 7176 w
+10 R f
+(QuickPage con\256guration \256le)2 1165 1 1523 7176 t
+10 S1 f
+(#)1440 7296 w
+10 R f
+( 6)1 1888( change: 05/08/99)2 732( Last)1 1302(Thomas Dwyer III)2 758 4 720 7776 t
+cleartomark
+showpage
+restore
+%%EndPage: 6 6
+%%Page: 7 7
+save
+mark
+7 pagesetup
+10 R f
+( \( 1 \))3 164( qpage)1 3839(User Commands)1 677 3 720 480 t
+(administrator=tomiii)1440 960 w
+10 S1 f
+(@)2269 960 w
+10 R f
+(qpage.org)2361 960 w
+(identtimeout=5)1440 1080 w
+(queuedir=/var/spool/qpage)1440 1200 w
+(modem=ttya)1440 1440 w
+(device=/dev/cua/a)1800 1560 w
+10 S1 f
+(#)1440 1800 w
+10 R f
+(use the S7 modem register to set a connection timeout)9 2234 1 1523 1800 t
+(modem=ttyb)1440 1920 w
+(device=/dev/cua/b)1800 2040 w
+(initcmd=ATS7=45V1Q2&K0&M0)1800 2160 w
+(service=airtouch)1440 2400 w
+(device=ttya,ttyb)1800 2520 w
+(phone=9,9500572)1800 2640 w
+(baudrate=1200)1800 2760 w
+(allowpid=yes)1800 2880 w
+(maxtries=6)1800 3000 w
+(service=skytel)1440 3240 w
+(device=ttya)1800 3360 w
+(phone=9,18007596366)1800 3480 w
+(service=supercom)1440 3720 w
+(device=ttya)1800 3840 w
+(phone=9,4879889)1800 3960 w
+(pager=tomiii)1440 4200 w
+(pagerid=1234567)1800 4320 w
+(service=skytel)1800 4440 w
+(pager=ginger)1440 4680 w
+(pagerid=5551212)1800 4800 w
+(service=skytel)1800 4920 w
+(pager=tony)1440 5160 w
+(pagerid=711)1800 5280 w
+(service=supercom)1800 5400 w
+(group=sysadmin)1440 5640 w
+(member=tomiii/MoWeFr800-1700)1800 5760 w
+(member=tony/TuTh800-1700)1800 5880 w
+(member=tony/SaSu900-1600)1800 6000 w
+9 B f
+(NOTES)720 6168 w
+10 R f
+( The)1 236( is important.)2 577(The order of the command line options)6 1691 3 1080 6288 t
+10 S1 f
+(\261)3632 6288 w
+10 B f
+(a,)3697 6288 w
+10 S1 f
+(\261)3820 6288 w
+10 B f
+(c,)3885 6288 w
+10 R f
+(and)4002 6288 w
+10 S1 f
+(\261)4194 6288 w
+10 B f
+(l)4259 6288 w
+10 R f
+(options must precede the)3 1065 1 4335 6288 t
+(pagerids they refer to.)3 899 1 1080 6408 t
+(The)1080 6576 w
+10 S1 f
+(\261)1272 6576 w
+10 B f
+(p)1337 6576 w
+10 R f
+(option resets)1 520 1 1430 6576 t
+10 S1 f
+(\261)1987 6576 w
+10 B f
+(a,)2052 6576 w
+10 S1 f
+(\261)2164 6576 w
+10 B f
+(c,)2229 6576 w
+10 R f
+(and)2335 6576 w
+10 S1 f
+(\261)2516 6576 w
+10 B f
+(l)2581 6576 w
+10 R f
+( this behavior is not)4 841( If)1 137( processed.)1 456(to their default values after it is)6 1320 4 2646 6576 t
+(desired, use)1 479 1 1080 6696 t
+10 S1 f
+(\261)1592 6696 w
+10 B f
+(P)1657 6696 w
+10 R f
+(instead.)1751 6696 w
+( they are transmitted to the paging service, regardless of)9 2342(All 8-bit characters are stripped to 7 bits before)8 1978 2 1080 6864 t
+( all control characters \(ASCII values between)6 1925( Also,)1 290( de\256ned in the con\256guration \256le.)5 1395(the parity setting)2 710 4 1080 6984 t
+(0x00 and 0x20\) are)3 821 1 1080 7104 t
+10 S1 f
+(")1942 7104 w
+10 R f
+(escaped)1983 7104 w
+10 S1 f
+(")2298 7104 w
+10 R f
+( is done by converting)4 956( Escaping)1 441(as speci\256ed by the IXO/TAP protocol.)5 1622 3 2381 7104 t
+( into two bytes consisting of a SUB \(0x1A\) character followed by the printable)13 3401(each control character)2 919 2 1080 7224 t
+( 7)1 1888( change: 05/08/99)2 732( Last)1 1302(Thomas Dwyer III)2 758 4 720 7704 t
+cleartomark
+showpage
+restore
+%%EndPage: 7 7
+%%Page: 8 8
+save
+mark
+8 pagesetup
+10 R f
+( \( 1 \))3 164( qpage)1 3839(User Commands)1 677 3 720 480 t
+( Ctrl-A is)2 416( Thus,)1 302( of the control character.)4 1053(ASCII character formed by adding 0x40 to the ASCII value)9 2549 4 1080 960 t
+(transmitted as the two-byte sequence 0x1A, 0x41.)6 2045 1 1080 1080 t
+(The)1080 1248 w
+10 B f
+(QuickPage)1285 1248 w
+10 R f
+( the page)2 412(daemon listens for incoming SNPP connections and periodically processes)8 3186 2 1802 1248 t
+( handle each incoming request and each queue)7 1937( separate child process is created on demand to)8 1977(queue. A)1 406 3 1080 1368 t
+(run.)1080 1488 w
+( the child sends SIGUSR1 to its parent forcing it to start a queue run immedi-)15 3290(After a page is accepted,)4 1030 2 1080 1656 t
+(ately without waiting for the time speci\256ed by)7 1965 1 1080 1776 t
+10 S1 f
+(\261)3086 1776 w
+10 R f
+( desired, this signal can be suppressed using the)8 2034(q. If)1 215 2 3151 1776 t
+10 S1 f
+(")1080 1896 w
+10 R f
+(synchronous)1121 1896 w
+10 S1 f
+(")1626 1896 w
+10 R f
+(keyword described above.)2 1060 1 1700 1896 t
+( queue runs to prevent multiple processes from competing for modem)10 2945(The page queue is locked during)5 1375 2 1080 2064 t
+(resources.)1080 2184 w
+(The)1080 2352 w
+10 B f
+(QuickPage)1274 2352 w
+10 R f
+( command not documented in the of\256cial)6 1733(SNPP daemon supports a proprietary XWHO)5 1887 2 1780 2352 t
+( no arguments and returns a multi-line response)7 1963( takes)1 240( XWHO)1 378(SNPP protocol as described in RFC-1861.)5 1739 4 1080 2472 t
+(of the form:)2 493 1 1080 2592 t
+(214 pager1 text1)2 687 1 1440 2760 t
+(214 pager2 text2)2 687 1 1440 2880 t
+(214 pager3 text3)2 687 1 1440 3000 t
+(.)1473 3120 w
+(.)1473 3240 w
+(.)1473 3360 w
+(214 pagerN textN)2 731 1 1440 3480 t
+(250)1440 3600 w
+( group, followed by the)4 987(where the \256rst word after the 214 response code is the name of a pager or page)16 3333 2 1080 3768 t
+( spaces\) from the con\256guration)4 1302(value of the corresponding text keyword \(with underscores converted to)9 3018 2 1080 3888 t
+( in the con\256guration \256le)4 1025( and group speci\256cations that do not have the text keyword de\256ned)11 2842(\256le. Pager)1 453 3 1080 4008 t
+( to allow SNPP)3 660( purpose of the XWHO command is)6 1538( The)1 229(will not be included in the XWHO response.)7 1893 4 1080 4128 t
+( is sup-)2 309( XWHO)1 378( of possible recipients and their names or descriptions.)8 2252(clients to present users with a list)6 1381 4 1080 4248 t
+(ported by)1 390 1 1080 4368 t
+10 B f
+(QuickPage)1505 4368 w
+10 R f
+( the protocol)2 523( If)1 133( the current SNPP protocol's de\256ciency.)5 1654(in an attempt to overcome)4 1083 4 2007 4368 t
+( to include this functionality, support for the XWHO command will be)11 3106(is ever revised in the future)5 1214 2 1080 4488 t
+( developers writing their own)4 1220( Software)1 429( whatever facilities are speci\256ed at that time.)7 1862(dropped in favor of)3 809 4 1080 4608 t
+( that the XWHO command is not stable and may be removed from)12 2957(SNPP clients should be advised)4 1363 2 1080 4728 t
+(future releases of)2 702 1 1080 4848 t
+10 B f
+(QuickPage)1815 4848 w
+10 R f
+(without notice.)1 608 1 2315 4848 t
+( information received by the)4 1187(If the CALLerid)2 680 2 1080 5016 t
+10 B f
+(QuickPage)2986 5016 w
+10 R f
+(daemon contains the ')3 921 1 3492 5016 t
+10 S1 f
+(@)4413 5016 w
+10 R f
+(' character, it is trun-)4 895 1 4505 5016 t
+( it is used as-is for the destination)7 1411( However,)1 458( being prepended to messages.)4 1257(cated at that character before)4 1194 4 1080 5136 t
+(address when sending e-mail noti\256cation for high-priority recipients.)7 2808 1 1080 5256 t
+(Due to the protocol limitations of SNPP,)6 1788 1 1080 5424 t
+10 B f
+(QuickPage)2920 5424 w
+10 R f
+( noti\256cation addresses from the)4 1366(derives e-mail)1 595 2 3439 5424 t
+10 B f
+(CALLerid)1080 5544 w
+10 R f
+( the)1 165(information. Since)1 795 2 1573 5544 t
+10 B f
+(CALLerid)2576 5544 w
+10 R f
+( bogus, all e-mail noti\256cations are)5 1445(information might be)2 886 2 3069 5544 t
+( will prevent error messages from being generated by the mail sys-)11 2818( This)1 250(sent using a null reverse path.)5 1252 3 1080 5664 t
+(tem if a bogus address is used for e-mail noti\256cation.)9 2192 1 1080 5784 t
+(If the server does not receive a)6 1373 1 1080 5952 t
+10 B f
+(CALLerid)2503 5952 w
+10 R f
+(command \(sent by the)3 960 1 3003 5952 t
+10 B f
+(QuickPage)4013 5952 w
+10 R f
+(client unless)1 522 1 4530 5952 t
+10 S1 f
+(\261)5102 5952 w
+10 R f
+(f)5167 5952 w
+10 S1 f
+("")5200 5952 w
+10 R f
+(is)5333 5952 w
+( speci\256ed service)2 705(speci\256ed on the command line\) noti\256cation messages will not be sent, regardless of the)13 3615 2 1080 6072 t
+(level.)1080 6192 w
+(When the)1 410 1 1080 6360 t
+10 S1 f
+(\261)1540 6360 w
+10 B f
+(m)1605 6360 w
+10 R f
+( a high-priority page, the status noti\256cation is sent to the return)11 2801(\257ag is used to send)4 861 2 1738 6360 t
+(address in the original e-mail message unless overridden by the)9 2604 1 1080 6480 t
+10 S1 f
+(\261)3717 6480 w
+10 B f
+(f)3782 6480 w
+10 R f
+(option.)3848 6480 w
+(The length of SNPP commands is limited only by the amount of memory available to)14 3528 1 1080 6648 t
+10 B f
+(QuickPage.)4641 6648 w
+(QuickPage)1080 6816 w
+10 R f
+( This)1 245( from the remote modem.)4 1054(uses a timeout of 255 seconds while waiting for a connection)10 2521 3 1580 6816 t
+( setting the modem's S7 register in the dial)8 1796(allows the administrator to specify an appropriate timeout by)8 2524 2 1080 6936 t
+(command.)1080 7056 w
+( 8)1 1888( change: 05/08/99)2 732( Last)1 1302(Thomas Dwyer III)2 758 4 720 7680 t
+cleartomark
+showpage
+restore
+%%EndPage: 8 8
+%%Page: 9 9
+save
+mark
+9 pagesetup
+10 R f
+( \( 1 \))3 164( qpage)1 3839(User Commands)1 677 3 720 480 t
+( of the modem)3 625( the on/off hook status)4 950( Otherwise,)1 507(The modem must control the CD \(carrier-detect\) line.)7 2238 4 1080 960 t
+( if more than one paging service is used since)9 1888( is especially important)3 957( This)1 245(cannot be determined.)2 902 4 1080 1080 t
+10 B f
+(Quick-)5105 1080 w
+(Page)1080 1200 w
+10 R f
+(must be able to detect when it's safe to send dial commands to the modem.)14 3106 1 1318 1200 t
+9 B f
+(FILES)720 1368 w
+10 R f
+(/etc/qpage.cf)1080 1488 w
+9 B f
+(SEE ALSO)1 460 1 720 1656 t
+10 B f
+(RFC-1861)1080 1776 w
+9 B f
+(KNOWN BUGS)1 650 1 720 1944 t
+10 R f
+( if no servers are available to the client at the time)11 2125( a result,)2 363( As)1 180(Pages are not queued on the client side.)7 1652 4 1080 2064 t
+(a page is submitted, an error message is printed and the page is discarded.)13 3051 1 1080 2184 t
+(Pages received after a queue run has started will not be processed until the following queue run.)16 3956 1 1080 2352 t
+( the service de\256nitions\), even if no)6 1498(The default service requires a phone keyword \(just like the rest of)11 2822 2 1080 2520 t
+(pager entries speci\256cally reference the default service.)6 2215 1 1080 2640 t
+(Because)1080 2808 w
+10 B f
+(QuickPage)1445 2808 w
+10 R f
+( the location of the page queue, the)7 1460(must read the con\256guration \256le to determine)6 1824 2 1945 2808 t
+10 S1 f
+(\261)5263 2808 w
+10 R f
+(Q)5328 2808 w
+(option will only work for users with appropriate access to the modems, page queue, and lock directory.)16 4246 1 1080 2928 t
+(Please send additional bug reports to tomiii)6 1781 1 1080 3096 t
+10 S1 f
+(@)2861 3096 w
+10 R f
+(qpage.org.)2953 3096 w
+9 B f
+(AUTHOR)720 3264 w
+10 B f
+(QuickPage)1080 3384 w
+10 R f
+(was written by Thomas Dwyer III)5 1410 1 1583 3384 t
+10 S1 f
+(<)3029 3384 w
+10 R f
+(tomiii)3085 3384 w
+10 S1 f
+(@)3325 3384 w
+10 R f
+(qpage.org)3417 3384 w
+10 S1 f
+(>)3813 3384 w
+10 R f
+( the internet com-)3 743(and is provided to)3 752 2 3905 3384 t
+(munity free of charge for non-commercial use \(i.e.)7 2124 1 1080 3504 t
+10 B f
+(QuickPage)3277 3504 w
+10 R f
+( any way)2 388(may not be used for pro\256t in)6 1228 2 3784 3504 t
+(without prior written permission.\))3 1379 1 1080 3624 t
+(Copyright \(c\) 1995-1999 Thomas Dwyer III)5 1806 1 1080 3792 t
+( 9)1 1888( change: 05/08/99)2 732( Last)1 1302(Thomas Dwyer III)2 758 4 720 7680 t
+cleartomark
+showpage
+restore
+%%EndPage: 9 9
+%%Trailer
+done
+%%DocumentFonts: Times-Roman Times-Bold Times-Italic Symbol
+%%Pages: 9

@@ -1,0 +1,86 @@
+The following is my "to do" list for QuickPage (not in any particular order)
+----------------------------------------------------------------------------
+
+- Add the forwarding capability from v2.0 back in.  It would be nice
+  if people could use the LOGIn SNPP command to change where their
+  pages are sent.
+
+- Add support for DTMF paging.  Unfortunately there is no way to determine
+  success vs. failure, and not all modems will be able to do it.
+
+- Write a cool Java interface.
+
+- Write a cool X11 client interface.
+
+- Provide some mechanism for sending/canceling specific pages in the queue.
+
+- Let the client read .qpage-aliases so users can make their own groups.
+
+- Add support for modems connected to network terminal servers.
+
+- Add support for a generic backend database for looking up pagerids.
+
+- Add support for 2-way pagers, assuming I can convince SkyTel to be more
+  cooperative and let me have a peek at their proprietary modem protocol.
+  They have an API for developers that comes in binary form but I don't
+  like it at all; there's no source code, it's too slow, and it's not
+  nearly as portable as qpage.
+
+- Add support for running qpage from inetd as a "wait" service.  I don't
+  see much use for this since qpage should always be running anyway to
+  process the page queue periodically, but lots of people have requested
+  this feature.  Perhaps someone can answer this question: what happens
+  if a page is submitted with a HOLDuntil time 3 hours from now, and
+  two hours later the machine crashes/reboots?  If qpage is not started
+  by some rc script and no one submits another page for a while, the
+  page in the queue will not be delivered on time.  This could be bad.
+
+- Add an email keyword to the pager entry so failed (all?) pages can be
+  emailed to the recipients if necessary.
+
+- Add "mapfile=<filename>" keyword to specify a character translation
+  table.  Characters in the message with a corresponding character in
+  the mapfile will be translated to that character.  This is mainly
+  intended for 8-bit characters which are otherwise stripped to 7 bits.
+
+- Make qpage threaded so it can process jobs to multiple different
+  paging services in parallel.
+
+- Put more smarts in the client so it will try multiple servers even
+  if a successful connection to one server results in a rejected page.
+
+- Add a "page format" keyword in the configuration file that would let
+  the administrator configure how a page is formatted.  I'm thinking
+  this would be similar to a printf() string where %F=from, %S=subject,
+  and %M=message.  In this case, a format of "%F_(Subj:_%S)_%M" would
+  result in the currently hard coded format.  Of course since no
+  keyword value is allowed to contain whitespace, underscores will
+  be translated to spaces just like in the "text" keywords.
+
+- Let keyword values contain \nnn which should be expanded to the
+  appropriate character value.
+
+- Find a better way for the client to pass the sender's e-mail address.
+  Perhaps the argument to the LOGIn command can be used for this.
+
+- If remote_connect() returns F_NOMODEM, try another modem instead of
+  giving up.
+
+- Add support for multi-block transmissions.  To my knowledge, SkyTel
+  is the only paging service that supports this.
+
+- Consider providing an option to suppress the compression of whitespace.
+
+- Add a configuration variable to control how many pages are sent to a
+  particular paging service during a single phone call rather than just
+  keep sending pages until they hang up on us.
+
+- Update the page queue after each page attempt; don't wait until the
+  end of the queue run.  If pages are delivered but the child is killed
+  before the queue is updated, those pages will be delivered again.
+
+- If pagerid not found, look in GECOS field of passwd file.
+
+- Let page groups include other groups.
+
+- Look for ID= after sending <ESC>PG1 and retry login if necessary

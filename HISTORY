@@ -1,0 +1,960 @@
+
+SCCS/s.qpage.c:
+
+D 3.36	98/07/26 13:05:41 tomiii	36 35	00001/00001/00622
+update copyright notice
+
+D 3.35	98/07/07 01:20:04 tomiii	35 34	00002/00002/00621
+don't strip() the message on the client side
+
+D 3.34	98/05/16 13:08:21 tomiii	34 33	00001/00001/00622
+single-word arguments with more than 1024 characters dump core
+
+D 3.33	98/04/26 17:20:11 tomiii	33 32	00003/00003/00620
+wrong error message
+wrong name of configuration file
+
+D 3.32	98/04/02 23:38:18 tomiii	32 31	00004/00002/00619
+always strip message
+
+D 3.31	98/03/19 23:49:11 tomiii	31 30	00015/00004/00606
+don't read the configuration until after dropping root privs
+
+D 3.30	98/03/18 00:45:12 tomiii	30 29	00001/00001/00609
+fix client-only compile error
+
+D 3.29	98/03/17 01:13:02 tomiii	29 28	00014/00003/00596
+add comment block for expand_recipients()
+
+D 3.28	98/03/12 00:20:43 tomiii	28 27	00097/00031/00502
+expand groups in interactive mode 
+check for illegal use of -C option
+
+D 3.27	98/02/21 22:17:05 tomiii	27 26	00040/00036/00493
+added silent mode
+always drop root privileges to avoid inconsistent behavior
+make -q0 process the queue without forking the SNPP daemon
+
+D 3.26	97/06/26 23:28:48 tomiii	26 25	00001/00000/00528
+add -C to usage
+
+D 3.25	97/06/26 23:09:44 tomiii	25 24	00009/00003/00519
+add -C option
+
+D 3.24	97/06/26 22:33:32 tomiii	24 23	00022/00008/00500
+add syntax warning
+accept undocumented port parameter on the command line (for testing only)
+
+D 3.23	97/06/21 14:38:02 tomiii	23 22	00011/00012/00497
+add -P option, make -t a synomym for -a
+
+D 3.22	97/06/04 00:09:20 tomiii	22 21	00004/00004/00505
+make buffer allocation code slightly more readable
+
+D 3.21	97/04/27 23:04:18 tomiii	21 20	00004/00004/00505
+typecast signal handlers so AIX doesn't complain
+
+D 3.20	97/04/10 09:22:49 tomiii	20 19	00001/00001/00508
+update copyright date
+
+D 3.19	97/04/07 20:02:11 tomiii	19 18	00017/00006/00492
+allow -f"" to override e-mail address from -m option
+
+D 3.18	97/04/05 17:04:31 tomiii	18 17	00046/00016/00452
+moved includes to qpage.h
+added -Q option
+create message id in interactive mode
+
+D 3.17	97/01/19 12:20:12 tomiii	17 16	00051/00026/00417
+converted function prototypes to ANSI C
+added warning message when running interactive mode as root
+added support for "client only" mode
+
+D 3.16	96/12/22 02:04:27 tomiii	16 15	00040/00004/00403
+fix buffer problems in command_line_message
+add support for multiple fallback servers
+
+D 3.15	96/11/29 12:59:42 tomiii	15 14	00007/00005/00400
+client return code should reflect page status
+
+D 3.14	96/11/27 09:16:32 tomiii	14 13	00002/00000/00403
+lint fix
+
+D 3.13	96/11/23 16:59:37 tomiii	13 12	00002/00001/00401
+changed usage of %Q% in do_version()
+
+D 3.12	96/11/19 00:39:07 tomiii	12 11	00016/00010/00386
+added -m option to process an e-mail message
+
+D 3.11	96/11/04 09:13:22 tomiii	11 10	00001/00001/00395
+use INVALID_TIME define
+
+D 3.10	96/10/09 23:12:17 tomiii	10 9	00014/00003/00382
+changed SIGCONT to SIGUSR1
+fixed bug which prevented -a, -c, or -l from being used without -p
+
+D 3.9	96/06/15 15:21:10 tomiii	9 8	00024/00014/00361
+fixed signal handling
+check command line syntax (-a, -c, -l must be followed by -p)
+
+D 3.8	96/05/30 11:13:28 tomiii	8 7	00001/00001/00374
+changed realloc() to my_realloc()
+
+D 3.7	96/05/30 09:47:23 tomiii	7 6	00011/00001/00364
+don't call sigaction() if SA_RESTART isn't defined
+
+D 3.6	96/05/01 01:47:17 tomiii	6 5	00008/00002/00357
+changed getmessage() to getinput()
+
+D 3.5	96/04/28 17:02:06 tomiii	5 4	00007/00008/00352
+check return code of read_config_file() in interactive mode
+
+D 3.4	96/04/24 21:59:41 tomiii	4 3	00026/00007/00334
+added interactive option
+
+D 3.3	96/04/04 22:15:18 tomiii	3 2	00001/00009/00340
+fixed minor lint problems
+
+D 3.2	96/04/03 21:01:33 tomiii	2 1	00000/00004/00349
+enabled client support
+
+D 3.1	96/04/01 20:26:47 tomiii	1 0	00353/00000/00000
+date and time created 96/04/01 20:26:47 by tomiii
+
+SCCS/s.usersnpp.c:
+
+D 1.18	98/10/24 18:28:20 tomiii	18 17	00016/00001/00412
+corner case: don't add extra whitespace
+
+D 1.17	98/03/12 00:36:36 tomiii	17 16	00008/00004/00405
+fix Y2K problem when passing HOLDuntil to the server
+
+D 1.16	98/02/21 22:34:03 tomiii	16 15	00007/00004/00402
+make return code reflect page status
+
+D 1.15	97/04/21 19:42:55 tomiii	15 14	00001/00001/00405
+lint fixes
+
+D 1.14	97/04/13 16:03:15 tomiii	14 13	00020/00007/00386
+fflush() SNPP commands
+fix DATA command to only send up to 70 characters on a line
+
+D 1.13	97/04/05 17:12:40 tomiii	13 12	00000/00012/00393
+move includes to qpage.h
+
+D 1.12	97/01/19 12:27:10 tomiii	12 11	00033/00045/00372
+converted function prototypes to ANSI C
+
+D 1.11	96/12/22 02:03:33 tomiii	11 10	00014/00004/00403
+add support for multiple fallback servers
+
+D 1.10	96/11/27 09:07:53 tomiii	10 9	00054/00048/00353
+fixed yucky syntax of send_command (and other lint fixes)
+
+D 1.9	96/10/09 23:18:52 tomiii	9 8	00006/00000/00395
+added comments
+
+D 1.8	96/06/16 15:07:28 tomiii	8 7	00020/00010/00375
+aesthetic changes
+
+D 1.7	96/05/30 09:52:40 tomiii	7 6	00013/00006/00372
+changed cftime() to localtime()/sprintf() for portability
+
+D 1.6	96/05/01 01:53:11 tomiii	6 5	00035/00005/00343
+try DATA command and then fall back to MESSage
+
+D 1.5	96/04/24 22:13:08 tomiii	5 4	00004/00004/00344
+changed debug to Debug
+
+D 1.4	96/04/04 22:16:07 tomiii	4 3	00002/00002/00346
+fixed minor lint problems
+
+D 1.3	96/04/03 21:04:13 tomiii	3 2	00124/00135/00224
+combined get_response() calls to one inside send_command()
+
+D 1.2	96/04/02 23:12:10 tomiii	2 1	00238/00034/00121
+parse responses from the server rather than just jam the data
+
+D 1.1	96/04/01 20:30:32 tomiii	1 0	00155/00000/00000
+date and time created 96/04/01 20:30:32 by tomiii
+
+SCCS/s.srvrsnpp.c:
+
+D 1.46	98/10/24 18:29:06 tomiii	47 46	00007/00001/01413
+close stdin, stdout, and stderr
+disable deadman timer
+
+D 1.45	98/07/07 01:20:30 tomiii	46 45	00002/00001/01412
+better usage of strip()
+
+D 1.44	98/06/11 22:34:23 tomiii	45 44	00001/00001/01412
+wrong usage of timeout in poll()
+
+D 1.43	98/06/07 03:43:34 tomiii	44 43	00038/00006/01375
+if available, use poll() instead of select()
+kill the child if a queue run takes longer than 5 minutes
+
+D 1.42	98/05/25 11:44:08 tomiii	43 42	00016/00002/01365
+added support for synchronous keyword
+don't fork a queue-processing child if one is already running
+
+D 1.41	98/05/16 16:15:30 tomiii	42 41	00001/00001/01366
+new syntax for write_page()
+
+D 1.40	98/05/16 13:10:44 tomiii	41 40	00037/00020/01330
+LOGIn command causes core dump
+add support for pidfile
+
+D 1.39	98/04/26 23:47:38 tomiii	40 39	00002/00000/01348
+lint
+
+D 1.38	98/04/26 23:44:28 tomiii	39 38	00001/00009/01347
+will I ever get this right?
+
+D 1.37	98/04/26 23:38:55 tomiii	38 37	00001/00001/01355
+always enable XWHO
+
+D 1.36	98/04/26 23:38:02 tomiii	37 36	00001/00001/01355
+always enable XWHO
+
+D 1.35	98/04/26 17:22:26 tomiii	36 35	00096/00030/01260
+add support for tcp_wrappers
+
+D 1.34	98/04/02 23:40:06 tomiii	35 34	00004/00002/01286
+always strip message
+
+D 1.33	98/03/19 23:49:25 tomiii	34 33	00005/00000/01283
+read the configuration after dropping root privs
+
+D 1.32	98/03/12 00:35:57 tomiii	33 32	00175/00184/01108
+only send SIGUSR1 to the parent, not to all processes
+only use one long-term process, fork children when necessary
+reread configuration on SIGHUP
+
+D 1.31	98/02/21 22:33:26 tomiii	32 31	00062/00024/01230
+add new XWHO command (unofficial)
+
+D 1.30	97/06/26 23:10:28 tomiii	31 30	00005/00005/01249
+add support for -C option
+
+D 1.29	97/06/26 22:33:57 tomiii	30 29	00013/00010/01241
+accept undocumented port parameter on the command line (for testing only)
+
+D 1.28	97/06/04 00:13:29 tomiii	29 28	00009/00003/01242
+put [] around IP address to make it valid in mail headers
+
+D 1.27	97/04/18 09:37:24 tomiii	28 27	00008/00004/01237
+log debug messages only if -d specified
+
+D 1.26	97/04/13 01:33:24 tomiii	27 26	00005/00001/01236
+print messageid after SEND command
+
+D 1.25	97/04/07 20:03:11 tomiii	26 25	00001/00001/01236
+don't mislead user--print "message queued" for SEND command
+
+D 1.24	97/04/05 17:12:13 tomiii	25 24	00098/00064/01139
+add save flag to clear_page()
+use level 0 for e-mail notification
+fix response string for LEVEl command
+add XQUEue command when compiling with -DDEBUG
+save hostname information from SNPP socket
+
+D 1.23	97/03/31 22:15:25 tomiii	24 23	00080/00045/01123
+fixed group support
+simplify logging
+
+D 1.22	97/01/23 18:39:20 tomiii	23 22	00009/00009/01159
+leave controlling terminal attached in debug mode
+
+D 1.21	97/01/23 17:49:30 tomiii	22 21	00094/00050/01074
+changed syslog() to qpage_log()
+made error messages more helpful
+leave process in the foreground for debug mode
+
+D 1.20	97/01/19 12:31:59 tomiii	21 20	00171/00214/00953
+converted function prototypes to ANSI C
+initial support for unique msgid token per page
+initial support for page groups in the configuration file
+truncate message to 500 bytes before sending it to syslog()
+moved getinput() to util.c
+lint fixes
+
+D 1.19	96/11/27 09:46:39 tomiii	20 19	00002/00000/01165
+lint fix
+
+D 1.18	96/11/27 09:35:35 tomiii	19 18	00004/00004/01161
+change of heart: make extra SNPP commands *not* the default
+
+D 1.17	96/11/27 09:16:39 tomiii	18 17	00004/00000/01161
+lint fixes
+
+D 1.16	96/11/26 00:42:14 tomiii	17 16	00071/00000/01090
+added debugging commands
+
+D 1.15	96/11/23 17:02:48 tomiii	16 15	00009/00001/01081
+added current time to 220 greeting message
+
+D 1.14	96/11/19 00:44:56 tomiii	15 14	00002/00002/01080
+fixed spelling error in declaration
+
+D 1.13	96/11/14 00:43:15 tomiii	14 12	00001/00001/01081
+
+
+D 1.12	96/11/04 09:32:52 tomiii	12 11	00007/00097/01075
+moved SNPP time parser to util.c
+changed SNPP messages to be more intuitive
+
+D 1.11	96/10/09 23:18:18 tomiii	11 10	00053/00033/01119
+added lots of comments
+changed SIGCONT to SIGUSR1
+added missing %m's to syslog() calls
+
+D 1.10	96/06/15 15:30:16 tomiii	10 9	00042/00011/01110
+fixed compiler-dependent code in parsing of HOLDuntil
+fixed broken signal handling for SIGCHLD
+log all incoming SNPP connections (with ident data if available)
+
+D 1.9	96/05/30 11:13:50 tomiii	9 8	00001/00001/01120
+changed realloc() to my_realloc()
+
+D 1.8	96/05/30 09:51:54 tomiii	8 7	00001/00000/01120
+#include <time.h>
+
+D 1.7	96/05/01 02:04:44 tomiii	7 6	00006/00002/01114
+don't set the timer in getinput() when reading from stdin
+
+D 1.6	96/05/01 01:52:09 tomiii	6 5	00086/00083/01030
+merge getline() and getmessage() into getinput()
+add code to handle timeouts
+
+D 1.5	96/04/28 17:05:41 tomiii	5 4	00098/00066/01015
+removed dashes from dohelp() output
+read the configuration file to detect errors before backgrounding
+print warning message if non-root user attempts to bind reserved port
+give up root permissions after setting up SNPP socket
+
+D 1.4	96/04/24 22:12:33 tomiii	4 3	00036/00027/01045
+add support for raw pagerids
+addded more syslog() messages
+
+D 1.3	96/04/04 22:15:49 tomiii	3 2	00001/00001/01071
+fixed minor lint problems
+
+D 1.2	96/04/03 21:02:20 tomiii	2 1	00006/00002/01066
+added "page submitted" syslog
+
+D 1.1	96/04/01 20:30:32 tomiii	1 0	01068/00000/00000
+date and time created 96/04/01 20:30:32 by tomiii
+
+SCCS/s.queue.c:
+
+D 1.22	98/07/07 01:19:33 tomiii	22 21	00000/00001/00898
+remove spurious call to strip()
+
+D 1.21	98/05/16 16:15:00 tomiii	21 20	00020/00007/00879
+don't blather about e-mail notifications for new pages
+
+D 1.20	98/04/26 17:21:42 tomiii	20 19	00008/00006/00878
+don't process bad pages during queue runs
+
+D 1.19	98/04/02 23:39:52 tomiii	19 18	00001/00001/00883
+always strip message
+
+D 1.18	98/03/12 00:33:24 tomiii	18 17	00061/00056/00823
+create lock files mode 666
+rename bad pages to Bxxxxxx
+lock the page queue during queue runs
+
+D 1.17	97/04/28 08:43:04 tomiii	17 16	00001/00001/00878
+fix bad return code
+
+D 1.16	97/04/13 16:01:58 tomiii	16 15	00003/00000/00876
+handle old queue files which don't have message IDs
+
+D 1.15	97/04/13 01:38:42 tomiii	15 14	00003/00000/00873
+print blank line between pages
+
+D 1.14	97/04/13 01:32:42 tomiii	14 13	00030/00029/00843
+fix -Q output
+always rewrite queue files because flags may have changed
+
+D 1.13	97/04/05 17:09:16 tomiii	13 12	00150/00036/00722
+moved includes to qpage.h
+add hostname to queue files
+send e-mail notification
+use my_ctime() instead of the real ctime()
+added showqueue() function
+
+D 1.12	97/01/23 17:50:16 tomiii	12 11	00044/00036/00714
+changed syslog() to qpage_log()
+
+D 1.11	97/01/19 12:35:27 tomiii	11 10	00074/00042/00676
+converted function prototypes to ANSI C
+skip successful pagers on retries
+initial support for unique msgid token per page
+lint fixes
+
+D 1.10	96/11/27 09:12:32 tomiii	10 9	00005/00003/00713
+lint fixes
+
+D 1.9	96/11/23 17:01:26 tomiii	9 8	00014/00004/00702
+buffer size computed incorrectly
+
+D 1.8	96/11/19 00:41:56 tomiii	8 7	00002/00002/00704
+fixed spelling error in declaration
+
+D 1.7	96/11/14 00:39:22 tomiii	7 6	00011/00004/00695
+preserve whitespace when reading back the CALLerid data
+
+D 1.6	96/06/04 14:11:33 tomiii	6 5	00004/00004/00695
+fdopen() with "w" rather than "w+" for compatibility
+added %m to several syslog() calls
+fixed filename parameter to some syslog() calls
+
+D 1.5	96/05/28 08:33:28 tomiii	5 4	00066/00010/00633
+add "goodtries" counter
+explicitly truncate the queue file before rewriting it
+check the timestamp on the page queue in case new jobs were submitted
+
+D 1.4	96/04/24 22:10:29 tomiii	4 3	00051/00011/00592
+print flag meanings in queue file
+
+D 1.3	96/04/04 22:15:35 tomiii	3 2	00004/00002/00599
+fixed minor lint problems
+
+D 1.2	96/04/03 21:01:01 tomiii	2 1	00003/00001/00598
+check for debug flag before logging "skipping %s for now"
+
+D 1.1	96/04/01 20:30:30 tomiii	1 0	00599/00000/00000
+date and time created 96/04/01 20:30:30 by tomiii
+
+SCCS/s.config.c:
+
+D 1.29	99/01/01 19:14:49 tomiii	29 28	00005/00002/01563
+print warning message if dialcmd is used in service definitions
+
+D 1.28	98/08/22 17:17:24 tomiii	28 27	00003/00003/01562
+use enumeration instead of hard-coded integer values
+
+D 1.27	98/07/26 11:22:01 tomiii	27 26	00036/00000/01529
+added sigfile keyword
+
+D 1.26	98/07/07 01:20:58 tomiii	26 25	00004/00000/01525
+enforce a maximum page size of 250 characters (for now)
+
+D 1.25	98/05/25 11:42:16 tomiii	25 24	00047/00013/01478
+added synchronous keyword
+fixed comment processing
+
+D 1.24	98/05/16 13:08:50 tomiii	24 23	00076/00004/01415
+add pidfile keyword
+
+D 1.23	98/04/27 01:19:32 tomiii	23 22	00002/00003/01417
+don't append device names in service definitions
+
+D 1.22	98/04/26 17:20:47 tomiii	22 21	00012/00004/01408
+check access to lock directory
+
+D 1.21	98/04/02 23:38:45 tomiii	21 20	00000/00019/01412
+remove stripmsg keyword
+
+D 1.20	98/03/18 00:40:11 tomiii	20 19	00008/00016/01423
+delete initcmd from service specification
+
+D 1.19	98/03/17 01:12:20 tomiii	19 18	00158/00014/01281
+fix check_service to make sure we have a dialcmd
+make sure groups and pagers do not have overlapping namespaces
+add missing comment sections
+
+D 1.18	98/03/12 00:26:45 tomiii	18 17	00568/00306/00727
+major changes--almost a total rewrite
+add support for including other config files
+add modem groups
+default service always exists
+check validity of keywords (for example, can we access() the modem?)
+add lockdir major keyword
+add phone minor keyword to service specification
+changed strip minor keyword to stripmsg
+changed prefix minor keyword to msgprefix
+add support for SIGHUP to reread the configuration file(s)
+
+D 1.17	98/02/21 22:22:11 tomiii	17 16	00214/00109/00819
+the "default" service always exists now
+new services are initialized from the default service
+new "initcmd" keyword for services
+new "stripmsg" keyword for services
+new "prefix" keyword for services
+new "text" keyword for all entries
+
+D 1.16	97/06/26 23:10:08 tomiii	16 15	00004/00004/00924
+add support for -C option
+
+D 1.15	97/06/05 20:57:37 tomiii	15 14	00028/00022/00900
+change forcehostname syntax
+
+D 1.14	97/06/04 00:10:31 tomiii	14 13	00060/00017/00862
+add forcehostname keyword
+delete dead code
+initialize global variables
+
+D 1.13	97/04/27 23:04:59 tomiii	13 12	00005/00011/00874
+fix missed non-ANSI function declarations
+
+D 1.12	97/04/07 20:02:37 tomiii	12 11	00006/00002/00879
+check syntax of duty schedule when file is read
+
+D 1.11	97/04/05 17:05:01 tomiii	11 10	00041/00007/00840
+added administrator keyword
+
+D 1.10	97/04/01 09:51:11 tomiii	10 9	00111/00012/00736
+move includes to qpage.h
+added support for page groups
+
+D 1.9	97/01/19 12:36:33 tomiii	9 8	00023/00020/00725
+converted function prototypes to ANSI C
+initial conversion from printf/syslog to qpage_log()
+lint fixes
+
+D 1.8	96/11/27 09:23:56 tomiii	8 7	00002/00000/00743
+lint fix
+
+D 1.7	96/06/04 14:09:48 tomiii	7 6	00004/00000/00739
+fixed seg fault if no device/dialcmd in default service entry
+
+D 1.6	96/05/30 09:48:22 tomiii	6 5	00023/00002/00716
+added "parity" keyword for service specification
+
+D 1.5	96/05/02 00:49:43 tomiii	5 4	00001/00001/00717
+fixed broken preprocessor directive
+
+D 1.4	96/05/01 01:48:19 tomiii	4 3	00033/00000/00685
+added snpptimeout keyword
+
+D 1.3	96/04/28 17:03:00 tomiii	3 2	00054/00021/00631
+added haserrors flag so better error checking can be done
+
+D 1.2	96/04/24 22:02:51 tomiii	2 1	00061/00004/00591
+changed identfrom default to TRUE rather than FALSE
+added identtimeout keyword
+added allowpid keyword
+added range checking for some keywords
+
+D 1.1	96/04/01 20:30:26 tomiii	1 0	00595/00000/00000
+date and time created 96/04/01 20:30:26 by tomiii
+
+SCCS/s.util.c:
+
+D 1.32	98/10/24 18:30:52 tomiii	33 32	00002/00002/01488
+declare JobsPending and ReReadConfig volatile so they will
+
+D 1.31	98/07/07 00:03:12 tomiii	32 31	00001/00001/01489
+allow CR in addition to LF and CRLF as a line terminator
+
+D 1.30	98/05/16 16:16:01 tomiii	31 30	00008/00002/01482
+fix previous delta
+
+D 1.29	98/05/16 13:11:18 tomiii	30 29	00004/00002/01480
+don't print "cannot lock queue lockfile" unless debugging
+
+D 1.28	98/04/26 17:23:33 tomiii	29 28	00048/00027/01434
+use waitpid() if possible in case we miss SIGCHLD
+
+D 1.27	98/04/02 23:41:19 tomiii	28 27	00100/00018/01361
+change strip() to use 7-bit chars and escape control chars
+
+D 1.26	98/03/18 00:41:27 tomiii	27 26	00006/00003/01373
+handle Y2K problem correctly
+
+D 1.25	98/03/17 01:17:06 tomiii	26 25	00065/00021/01311
+added strjoin()
+fixed msgcpy() to split the message correctly at whitespace
+
+D 1.24	98/03/12 00:38:57 tomiii	25 24	00145/00048/01187
+much better SIGCHLD handler
+use vsyslog() when available
+fix drop_root_privileges() implementation
+add safe_strtok() function--the real strtok() sucks rocks
+
+D 1.23	98/02/21 22:36:01 tomiii	24 23	00112/00060/01123
+new drop_root_privileges() function
+use 000 umask when creating lockfiles
+remove useless sysinfo() code
+new strip() function
+
+D 1.22	97/04/27 23:06:09 tomiii	23 22	00023/00002/01160
+AIX does not support vsyslog()
+
+D 1.21	97/04/23 08:28:57 tomiii	22 21	00015/00002/01147
+sysinfo() not supported on some platforms
+
+D 1.20	97/04/13 01:33:52 tomiii	21 20	00075/00000/01074
+move msgcpy() from ixo.c to util.c
+
+D 1.19	97/04/07 20:26:51 tomiii	20 19	00004/00001/01070
+fix gmtoffset computation again (is it right this time?)
+
+D 1.18	97/04/07 20:03:44 tomiii	19 18	00009/00001/01062
+allow midnight to be specified as 0 or 2400
+
+D 1.17	97/04/05 17:13:59 tomiii	18 16	00155/00023/00908
+move includes to qpage.h
+add LOG_ALERT kludge to qpage_log()
+add my_ctime() function
+add on_duty() function
+add get_sysinfo() function
+
+D 1.13.1.1	97/01/23 19:01:40 tomiii	17 13	00003/00010/00756
+fixed non-portable timezone code
+
+D 1.16	97/01/23 18:52:01 tomiii	16 15	00003/00010/00928
+fixed non-portable timezone code
+
+D 1.15	97/01/23 18:37:59 tomiii	15 14	00080/00079/00858
+changed syslog() to qpage_log()
+
+D 1.14	97/01/19 12:38:00 tomiii	14 13	00248/00077/00689
+converted function prototypes to ANSI C
+added qpage_log()
+moved getinput() from srvrsnpp.c
+lint fixes
+
+D 1.13	96/12/22 02:01:43 tomiii	13 12	00001/00000/00765
+send a syslog message when exiting via SIGTERM
+
+D 1.12	96/11/27 09:24:11 tomiii	12 11	00002/00000/00763
+lint fix
+
+D 1.11	96/11/04 09:32:04 tomiii	11 10	00135/00005/00628
+moved SNPP time parser from srvrsnpp.c
+call SNPP time parser from parse_time()
+
+D 1.10	96/10/09 23:19:49 tomiii	10 9	00019/00006/00614
+changed SIGCONT to SIGUSR1
+added missing %m's to syslog() calls
+added comments
+
+D 1.9	96/06/15 15:27:34 tomiii	9 8	00006/00009/00614
+fix sigterm() to kill everyone else in the process group
+
+D 1.8	96/06/04 14:02:53 tomiii	8 7	00003/00001/00620
+fixed check for active owner of lockfile
+
+D 1.7	96/05/30 11:14:57 tomiii	7 6	00025/00000/00596
+added my_realloc()
+
+D 1.6	96/05/30 09:54:12 tomiii	6 5	00004/00004/00592
+only include <sys/mkdev.h> on Solaris machines
+zero the entire lock structure rather than individual fields for portability
+
+D 1.5	96/05/01 01:53:52 tomiii	5 4	00015/00000/00581
+moved sigalrm() from ident.c to this file
+
+D 1.4	96/04/24 22:13:56 tomiii	4 3	00195/00004/00386
+added code to lock/unlock modem device
+
+D 1.3	96/04/04 22:16:19 tomiii	3 2	00001/00003/00389
+fixed minor lint problems
+
+D 1.2	96/04/03 21:05:11 tomiii	2 1	00003/00002/00389
+check for debug flag before logging "Child exited..."
+
+D 1.1	96/04/01 20:30:33 tomiii	1 0	00391/00000/00000
+date and time created 96/04/01 20:30:33 by tomiii
+
+SCCS/s.ixo.c:
+
+D 1.46	99/01/01 17:48:28 tomiii	46 45	00008/00003/01356
+include protocol overhead in maxmsgsize
+
+D 1.45	98/12/20 14:26:03 tomiii	45 44	00004/00001/01355
+don't print spurious error message
+
+D 1.44	98/10/25 10:50:58 tomiii	44 43	00001/00001/01355
+strip 8th bit on incoming characters
+
+D 1.43	98/10/24 17:58:15 tomiii	43 42	00004/00001/01352
+the check for enough space for "-oo-" used the wrong limit
+
+D 1.42	98/09/29 22:26:47 tomiii	42 41	00024/00018/01329
+fix a memory leak and use better implementation of prefixes
+
+D 1.41	98/09/15 19:58:22 tomiii	41 40	00001/00001/01346
+AIX requires CLOCAL being set before read()/write() will succeed
+
+D 1.40	98/09/10 23:52:36 tomiii	40 39	00002/00002/01345
+delete references to O_NDELAY
+
+D 1.39	98/08/22 17:16:49 tomiii	39 38	00156/00126/01191
+rewrite of getpacket() to work around AIX select()/read() bug
+
+D 1.38	98/07/26 11:21:15 tomiii	38 37	00002/00002/01315
+spaces instead of tabs typo
+
+D 1.37	98/07/12 13:49:56 tomiii	37 36	00012/00001/01305
+take into account the size of field1 when computing max_size
+
+D 1.36	98/07/07 01:21:19 tomiii	36 35	00027/00006/01279
+close the modem in a non-blocking way
+
+D 1.35	98/07/06 22:33:47 tomiii	35 34	00001/00001/01284
+fix incorrect error message
+
+D 1.34	98/06/11 22:34:22 tomiii	34 33	00001/00001/01284
+wrong usage of timeout in poll()
+
+D 1.33	98/06/07 03:42:08 tomiii	33 32	00068/00017/01217
+if available, use poll() instead of select()
+if TIOCM_CAR and/or TIOCM_DTR are undefined, drop that functionality
+
+D 1.32	98/06/01 01:22:05 tomiii	32 31	00063/00022/01171
+attempt to gracefully recover from being hung up on
+
+D 1.31	98/05/28 23:42:19 tomiii	31 30	00001/00001/01192
+no need for IMAXBEL setting on modem device
+
+D 1.30	98/05/25 11:42:54 tomiii	30 29	00020/00015/01173
+fixed illegal usage of freed memory
+
+D 1.29	98/05/20 00:21:35 tomiii	29 28	00036/00003/01152
+retry forced disconnects again
+
+D 1.28	98/05/16 16:14:02 tomiii	28 27	00036/00017/01119
+remove ioctl() calls in favor of tcgetattr()/tcsetattr()
+
+D 1.27	98/04/26 17:21:11 tomiii	27 26	00001/00001/01135
+don't hangup modem twice on forced disconnect
+
+D 1.26	98/04/02 23:39:37 tomiii	26 25	00002/00006/01134
+add sleep(1) while looking for ID=
+always use stripped message
+
+D 1.25	98/03/22 00:23:35 tomiii	25 24	00001/00000/01139
+forgot to declare return type of openmodem()
+
+D 1.24	98/03/18 00:41:07 tomiii	24 23	00011/00006/01128
+don't dump core if service->device is not a modem specification
+
+D 1.23	98/03/12 00:29:53 tomiii	23 22	00183/00154/00951
+no more modemfd global variable
+add support for multiple modems
+
+D 1.22	98/02/21 22:30:55 tomiii	22 21	00075/00037/01030
+change O_NDELAY to O_NONBLOCK for portability
+ignore null characters on input from remote
+adjusted some termios settings
+send CR and sleep 1 second before attempting to initialize modem
+don't spin forever on bad login to remote
+add support for strip and prefix keywords
+
+D 1.21	97/12/04 09:26:07 tomiii	21 20	00001/00001/01066
+changed Tom Limoncelli's address to tal@lucent.com at his request
+
+D 1.20	97/06/21 15:16:02 tomiii	20 19	00001/00001/01066
+make lint hack Solaris specific
+
+D 1.19	97/06/04 00:11:50 tomiii	19 18	00006/00003/01061
+fix bug in IXO protocol implementation
+truncate a copy of CALLerid, not the real thing
+
+D 1.18	97/04/28 08:43:38 tomiii	18 17	00013/00000/01051
+treat FD_ZERO as a special case for lint
+
+D 1.17	97/04/20 00:26:34 tomiii	17 16	00009/00009/01042
+logic was backwards when testing result of strstr()
+
+D 1.16	97/04/13 01:31:23 tomiii	16 15	00019/00078/01032
+move msgcpy() to util.c
+increment goodtries++ where appropriate
+
+D 1.15	97/04/07 20:16:29 tomiii	15 14	00009/00009/01101
+allow broken syntax from broken services (such as PageNet)
+
+D 1.14	97/04/01 09:37:28 tomiii	14 13	00080/00059/01030
+moved includes to qpage.h
+fixed byte-size when not using parity
+use termios functions rather than ioctl() calls
+add service name to log messages
+strip @hostname off the "from" address
+
+D 1.13	97/01/23 17:51:38 tomiii	13 12	00075/00209/01014
+changed syslog() to qpage_log()
+
+D 1.12	97/01/19 12:41:55 tomiii	12 11	00034/00048/01189
+converted function prototypes to ANSI C
+lint fixes
+
+D 1.11	96/12/22 02:02:49 tomiii	11 10	00002/00002/01235
+make some getpacket() timeouts longer
+
+D 1.10	96/11/27 09:14:12 tomiii	10 9	00009/00000/01228
+lockfile was not being removed on openmodem() failure
+
+D 1.9	96/11/24 11:49:07 tomiii	9 8	00012/00005/01216
+added part counter to syslog messages
+
+D 1.8	96/11/23 17:20:14 tomiii	8 7	00044/00041/01177
+fixed error detection
+
+D 1.7	96/10/09 23:16:36 tomiii	7 6	00016/00007/01202
+added missing %m's to syslog() calls
+added comments
+
+D 1.6	96/06/04 14:01:38 tomiii	6 5	00002/00002/01207
+fixed fcntl() usage of F_GETFL and F_SETFL
+
+D 1.5	96/05/30 09:59:25 tomiii	5 4	00001/00001/01208
+fix broken comment
+
+D 1.4	96/05/30 09:50:47 tomiii	4 3	00035/00010/01174
+#include <sys/select.h> explicitly for AIX machines
+changed ioctl(FIONBIO) to fcntl(F_GETFL)/fcntl(F_SETFL) for portability
+added support for parity specification
+turned on CLOCAL flag
+
+D 1.3	96/04/24 22:07:31 tomiii	3 2	00210/00048/00974
+added interactive support
+lock modem device before opening it
+open modem with O_NONBLOCK and then unset non-blocking mode with FIONBIO
+
+D 1.2	96/04/03 20:58:33 tomiii	2 1	00000/00014/01022
+removed redundant check for holduntil option
+
+D 1.1	96/04/01 20:30:28 tomiii	1 0	01036/00000/00000
+date and time created 96/04/01 20:30:28 by tomiii
+
+SCCS/s.ident.c:
+
+D 1.11	98/03/12 00:27:12 tomiii	11 10	00001/00001/00217
+change sccsid to qpage.org
+
+D 1.10	98/02/21 22:26:24 tomiii	10 9	00010/00003/00208
+made error message more appropriate
+
+D 1.9	97/04/27 23:05:33 tomiii	9 8	00005/00005/00206
+change error messages to identify who is printing them
+
+D 1.8	97/04/01 09:51:34 tomiii	8 7	00000/00013/00211
+move includes to qpage.h
+
+D 1.7	97/01/23 17:42:53 tomiii	7 6	00014/00008/00210
+changed syslog() to qpage_log()
+
+D 1.6	97/01/19 12:38:29 tomiii	6 5	00012/00014/00206
+converted function prototypes to ANSI C
+lint fixes
+
+D 1.5	96/11/27 09:24:04 tomiii	5 4	00002/00000/00218
+lint fix
+
+D 1.4	96/10/09 23:15:28 tomiii	4 3	00007/00007/00211
+convert port values to host byte order before using them
+added missing %m's to syslog() calls
+
+D 1.3	96/05/01 01:49:48 tomiii	3 2	00001/00037/00217
+moved sigalrm() to util.c
+keep SIGALRM handler installed all the time
+
+D 1.2	96/04/24 22:03:44 tomiii	2 1	00067/00008/00187
+added timeout code for ident query
+
+D 1.1	96/04/01 20:30:27 tomiii	1 0	00195/00000/00000
+date and time created 96/04/01 20:30:27 by tomiii
+
+SCCS/s.readmail.c:
+
+D 1.15	98/05/16 17:23:01 tomiii	15 14	00002/00000/00521
+
+
+D 1.14	98/05/16 17:14:54 tomiii	14 13	00012/00065/00509
+change the way a message is constructed
+
+D 1.13	98/05/16 13:11:44 tomiii	13 12	00006/00000/00568
+read entire message so sendmail doesn't get SIGPIPE
+
+D 1.12	98/03/12 00:39:16 tomiii	12 11	00001/00001/00567
+change sccsid to qpage.org
+
+D 1.11	97/04/18 09:31:43 tomiii	11 10	00001/00001/00567
+replyaddr was missing first 5 characters
+
+D 1.10	97/04/07 20:04:33 tomiii	10 9	00004/00007/00564
+allow -f on the command line to override e-mail reply address
+
+D 1.9	97/04/05 17:14:57 tomiii	9 8	00002/00002/00569
+use "reply" address instead of "from" address for p->from
+
+D 1.8	97/04/01 09:21:19 tomiii	8 7	00002/00010/00569
+don't truncate hostname in e-mail address--let the server do that
+move all includes to qpage.h
+
+D 1.7	97/02/10 02:14:30 tomiii	7 6	00012/00012/00567
+typecast malloc to (void *)
+
+D 1.6	97/01/19 12:40:10 tomiii	6 5	00055/00031/00524
+converted function prototypes to ANSI C
+fixed missing space when subject line is absent
+lint fixes
+
+D 1.5	96/12/22 01:37:17 tomiii	5 4	00010/00004/00545
+don't change p.from if -f"" used on the command line
+
+D 1.4	96/11/27 09:24:24 tomiii	4 3	00002/00000/00547
+lint fix
+
+D 1.3	96/11/23 17:01:58 tomiii	3 2	00001/00001/00546
+changed realloc() to my_realloc()
+
+D 1.2	96/11/19 01:36:49 tomiii	2 1	00014/00001/00533
+fixed MIME code to only use the first text part
+make MIME code stop at --
+
+D 1.1	96/11/19 00:44:41 tomiii	1 0	00534/00000/00000
+date and time created 96/11/19 00:44:41 by tomiii
+
+SCCS/s.sendmail.c:
+
+D 1.15	98/07/26 11:22:00 tomiii	15 14	00050/00004/00355
+added sigfile keyword
+
+D 1.14	98/06/01 01:17:38 tomiii	14 13	00004/00000/00355
+handle the case where sendmail isn't found on the system
+
+D 1.13	98/04/29 17:05:16 tomiii	13 12	00002/00002/00353
+printed wrong value for "Ident:"
+
+D 1.12	98/04/26 17:30:10 tomiii	12 11	00007/00006/00348
+fixed broken pipe handling
+
+D 1.11	98/03/12 00:40:11 tomiii	11 10	00075/00085/00279
+change invoke_sendmail() to work like popen()
+
+D 1.10	97/06/26 23:26:24 tomiii	10 9	00001/00001/00363
+
+
+D 1.9	97/06/05 20:57:55 tomiii	9 8	00025/00005/00339
+change forcehostname syntax
+
+D 1.8	97/06/04 00:14:16 tomiii	8 7	00014/00004/00330
+added forcehostname hack
+changed wording of notification message
+
+D 1.7	97/04/21 19:43:11 tomiii	7 6	00002/00002/00332
+lint fixes
+
+D 1.6	97/04/18 09:44:20 tomiii	6 5	00008/00006/00326
+previous delta was bogus
+
+D 1.5	97/04/18 09:37:34 tomiii	5 4	00002/00002/00330
+log debug messages only if -d specified
+
+D 1.4	97/04/13 16:03:55 tomiii	4 3	00010/00000/00322
+tell administrator to remove failed pages from the queue
+
+D 1.3	97/04/13 01:35:29 tomiii	3 2	00128/00082/00194
+fix lots and lots of brokeness
+
+D 1.2	97/04/05 17:48:10 tomiii	2 1	00004/00000/00272
+use administrator address (if defined) in the Reply-To: field
+
+D 1.1	97/04/05 17:16:01 tomiii	1 0	00272/00000/00000
+date and time created 97/04/05 17:16:01 by tomiii

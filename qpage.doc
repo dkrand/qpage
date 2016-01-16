@@ -1,0 +1,990 @@
+
+
+
+User Commands                                            qpage(1)
+
+
+
+NAME
+     qpage -  SNPP  client/server  for  sending  messages  to  an
+     alpha-numeric pager
+
+SYNOPSIS
+     qpage [ -dhimQv ] [ -a [+][dd+]hhmm | -a YYMMDDHHMMSS ] [ -c
+     coverage  ]  [  -f  from  ] [ -l level ] [ -p pagerid ] [ -P
+     pagerid ] [ -s server ] [ message ]
+
+     qpage [ -d ] [ -C config ] -q interval
+
+DESCRIPTION
+     QuickPage sends messages to a paging terminal using the SNPP
+     and  IXO (also known as TAP) protocols.  It is normally used
+     with no options other than a recipient and the message text,
+     in  which  case the message is sent to the SNPP server where
+     it is submitted to a page queue to be  sent  by  a  separate
+     daemon  process.   Page  groups  and duty schedules are sup-
+     ported.  Status notification messages indicating the success
+     or  failure  of  a page are sent via e-mail to submitters of
+     high-priority (level 0) pages.
+
+     If no message is specified on the command line, the user  is
+     prompted  for  the  message  text.  Characters are read from
+     standard input until a line  containing  only  a  period  is
+     received, or until EOF is received.  All occurrences of whi-
+     tespace within the message text  are  reduced  to  a  single
+     space character.
+
+     Messages received by the QuickPage daemon  that  are  longer
+     than the maximum page length (see below) are split into mul-
+     tiple segments and sent as  separate  pages.   Each  message
+     segment  is  prefixed  with its segment number.  The maximum
+     number of segments a into which a message will be  split  is
+     configurable.   If  a  message  exceeds this limit, the last
+     allowed segment will be prefixed with 't',  indicating  that
+     the  message  is  truncated;  otherwise, the last segment is
+     prefixed with 'e' to indicate the end of the message.   Mes-
+     sages that fit into a single page are not prefixed with seg-
+     ment numbers.  All message segments are prefixed  with  CAL-
+     Lerid information (see RFC-1861), if available.
+
+OPTIONS
+     The following options are supported:
+
+     -a   Send the page at the specified time.  A time specifica-
+          tion  prefixed  with  a  plus  sign (+) is added to the
+          current time.  The QuickPage daemon will not  send  any
+          pages  with  a  timestamp  newer than the current time.
+          This feature may be used  to  provide  a  simple  alarm
+          clock function for meeting reminders, etc.  This option
+          applies only to the pagerid(s) specified by the next -p
+
+
+
+Thomas Dwyer III      Last change: 05/08/99                     1
+
+
+
+
+
+
+User Commands                                            qpage(1)
+
+
+
+          option.   If  the  specified  time  is  in  the  format
+          YYMMDDHHMMSS, the two-digit year is interpreted as fol-
+          lows:  if the last two digits of the specified year are
+          in the range 00-49 and  the  last  two  digits  of  the
+          current  year are in the range 50-99, assume the speci-
+          fied time is in the next century.  Otherwise assume the
+          specified time is in the current century.
+
+     -c   Use a different coverage area or paging service.   This
+          option  is  only  useful if the recipient has more than
+          one pager and/or more than  one  paging  service.  This
+          option  applies only to the pagerid(s) specified by the
+          next -p option.
+
+     -C   Specify an alternate configuration file.   This  option
+          may only be used on the QuickPage server.
+
+     -d   Debug mode.  Very verbose and probably not  interesting
+          for  the  normal  user.   This  option  is provided for
+          debugging purposes only.
+
+     -f   Specify who the page is from.   This  option  specifies
+          the  argument to the SNPP CALLerid command.  Every mes-
+          sage segment will be prefixed with the value  specified
+          by this option unless disabled by the msgprefix keyword
+          in the configuration file.  A null argument  (  -f  "")
+          may  be  specified to suppress the message prefix for a
+          particular message.  However, this will  also  suppress
+          e-mail  status notification.  The default is the userid
+          of the person running QuickPage.
+
+     -h   Help.  Print  a  brief  summary  of  the  command  line
+          options.
+
+     -i   Use interactive mode.  The page is sent immediately and
+          summary  messages  are printed during the course of the
+          transaction.  This option may only be used on a machine
+          with  a  physically  attached  modem.   This  option is
+          intended for debugging purposes only and should not  be
+          used  in a production environment.  The -d option, when
+          used in conjunction  with  this  option,  can  be  very
+          effective  in troubleshooting problems between the SNPP
+          server and the remote paging terminal.
+
+     -l   Specify the service level for this page.   The  service
+          level  must  be  a  number between 0 and 11, inclusive.
+          The TME protocol specifies service level as follows:
+
+               0 - Priority
+               1 - Normal (default)
+               2 - Five minutes
+               3 - Fifteen minutes
+
+
+
+Thomas Dwyer III      Last change: 05/08/99                     2
+
+
+
+
+
+
+User Commands                                            qpage(1)
+
+
+
+               4 - One hour
+               5 - Four hours
+               6 - Twelve hours
+               7 - Twenty Four hours
+               8 - Carrier specific '1'
+               9 - Carrier specific '2'
+               10 - Carrier specific '3'
+               11 - Carrier specific '4'
+
+          With the exception of level zero, service  levels  have
+          no  meaning to QuickPage but they are accepted for com-
+          patibility with  other  programs.   Any  service  level
+          specified  by the user is passed on to the SNPP server.
+          For pages submitted with a service level of  zero,  the
+          QuickPage  daemon  will  send  an e-mail message to the
+          submitter notifying them  whether  the  page  succeeded
+          (i.e.  it  was  successfully  transmitted to the paging
+          service) or failed.  This option applies  only  to  the
+          pagerid(s) specified by the next -p option.
+
+     -m   This option tells QuickPage to read an  e-mail  message
+          from  standard  input.   A  page is constructed by con-
+          catenating the From: header (XXX), the Subject:  header
+          (YYY),  and  lines  from the message body (ZZZ) as fol-
+          lows:
+
+               XXX (Subj: YYY) ZZZ ...
+
+          Minimal support is provided  for  multipart  MIME  mes-
+          sages.    The   first  part  with  a  Content-Type:  of
+          text/plain will be processed.  The remaining parts will
+          be discarded.  This will reduce the problems associated
+          with people  accidentally  mailing  binaries  to  their
+          pagers.
+
+          The X-sun-attachment type is not supported  and  should
+          not  be  used.   MIME is a documented standard.  The X-
+          sun-attachment type is neither documented nor standard.
+          However,  QuickPage  will  still use the From: and Sub-
+          ject: lines (but no message body)  from  such  messages
+          for those people who insist on using it anyway.
+
+          A line starting with two dashes  (--)  in  the  message
+          body  (or  in  a  MIME  text part) is assumed to be the
+          start of a signature and will cause QuickPage  to  stop
+          processing the e-mail message at that point.
+
+     -p   Specify the pagerid of the intended recipient.   Multi-
+          ple  recipients  may  be  specified by separating their
+          pager        IDs        with        commas        (e.g.
+          pagerid1,pagerid2,pagerid3).   No  spaces are permitted
+          between recipients and the comma separator  characters.
+
+
+
+Thomas Dwyer III      Last change: 05/08/99                     3
+
+
+
+
+
+
+User Commands                                            qpage(1)
+
+
+
+          Any -a, -c, or -l options previously encountered on the
+          command line are reset to their  default  values  after
+          this option is processed.  This option may occur multi-
+          ple times on the command line, each  possibly  preceded
+          by different -a, -c, or -l options.
+
+     -P   Like -p but does not reset -a, -c, or -l options previ-
+          ously encountered on the command line.
+
+     -q   Start a QuickPage daemon.  This option causes QuickPage
+          to  detach itself from the controlling terminal and run
+          as a daemon process.  This option requires a  numerical
+          argument.   If  the  argument  is greater than zero, it
+          specifies the number of seconds QuickPage should  sleep
+          between queue runs.  An argument less than zero signals
+          QuickPage to accept incoming SNPP connections and write
+          new  pages  to the page queue, but to never process the
+          page queue.  An argument of zero signals QuickPage  not
+          to listen for incoming SNPP connections, but to process
+          the page queue one time and then exit.  See  the  NOTES
+          section below for more information.
+
+     -Q   Print the current contents of  the  page  queue.   This
+          option  may  only  be  used  on  the  QuickPage server.
+          Unless invoked by root or DAEMONUSER, this option  will
+          probably fail because of insufficient permissions.
+
+     -s   Specify the name(s) of the SNPP server(s).   The  host-
+          names  used  by a client to contact a server are deter-
+          mined by checking the following in this order:
+
+               the -s option
+               the environment variable SNPP_SERVER
+               the contents of the compiled in filename
+               the compiled in hostname
+
+          Multiple hostnames are  permitted  by  separating  them
+          with  commas.   If  multiple  servers  are  used, it is
+          assumed that they all have identical copies of the con-
+          figuration file.
+
+     -v   Print the version of QuickPage and exit.
+
+     The QuickPage server requires a  configuration  file.   This
+     file  is read one time during startup and again upon receipt
+     of SIGHUP.  The configuration file is made up of  major  and
+     minor keyword=value pairs.  Major keywords must start at the
+     beginning of a line.  Minor keywords  must  contain  leading
+     whitespace.   All keywords must be immediately followed with
+     an equal sign (=).  Spaces are permitted between  the  equal
+     sign  and  the value.  The value may not contain whitespace.
+     Keywords may appear in any order  with  the  following  four
+
+
+
+Thomas Dwyer III      Last change: 05/08/99                     4
+
+
+
+
+
+
+User Commands                                            qpage(1)
+
+
+
+     exceptions:
+
+          Minor keywords must be  grouped  together  under  their
+          respective major keyword.
+
+          Modems must be defined before any services that  refer-
+          ence them.
+
+          Services must be defined before any pagers that  refer-
+          ence them.
+
+          Pagers must be defined before any groups that reference
+          them.
+
+     The major keywords are:
+
+          administrator  The  e-mail  address  of  the  QuickPage
+                         administrator.    If   defined,   e-mail
+                         notification will be sent to the  Quick-
+                         Page administrator whenever a page fails
+                         (i.e. when maxtries has been  exceeded).
+                         This  address is also used in the Reply-
+                         To: header for status notification  mes-
+                         sages  sent  to  users  who submit high-
+                         priority pages.
+
+          forcehostname  (true, false, or  @mailhost)  Force  the
+                         destination address to be qualified with
+                         a hostname when  sending  e-mail  status
+                         notification  to users.  This option can
+                         be used when  the  QuickPage  daemon  is
+                         running  on a machine that does not han-
+                         dle   unqualified    e-mail    addresses
+                         correctly.  If the value of this keyword
+                         starts with the '@' character,  it  will
+                         be  appended as-is to unqualified e-mail
+                         addresses.  If the value of this keyword
+                         is  "true" then the submitter's hostname
+                         will be appended to such addresses.  The
+                         default  is  false  (do not append host-
+                         names).
+
+          identtimeout   The number of  seconds  to  wait  for  a
+                         reply   before  giving  up  on  RFC-1413
+                         queries.  An integer less than or  equal
+                         to  zero  disables  ident functionality.
+                         The default is 10 seconds.
+
+          include        If present, this keyword  specifies  the
+                         name  of another configuration file that
+                         should be processed at this point.  Pro-
+                         cessing  of  the  current  file  resumes
+
+
+
+Thomas Dwyer III      Last change: 05/08/99                     5
+
+
+
+
+
+
+User Commands                                            qpage(1)
+
+
+
+                         after the specified file has  been  pro-
+                         cessed.   QuickPage  makes no attempt to
+                         prevent infinite recursion; do  not  use
+                         this  keyword  in  multiple  files  that
+                         point at each other.
+
+          pidfile        If present,  this  keyword  specifies  a
+                         file  into which the server should write
+                         its process ID.   The  file  is  is  not
+                         opened until after root permissions have
+                         been dropped.  If DAEMONUSER cannot open
+                         the  file  for  writing  (or if the file
+                         does not exist and DAEMONUSER  does  not
+                         have permission to create it), this key-
+                         word is silently ignored.
+
+          sigfile        If present,  this  keyword  specifies  a
+                         file  containing  an alternate signature
+                         that QuickPage should append  to  e-mail
+                         status  notification  messages  sent  to
+                         page submitters.  Use  sigfile=/dev/null
+                         to suppress the signature completely.
+
+          synchronous    (true or false)  Whether  or  not  queue
+                         runs  are  synchronized  with new pages.
+                         If true, the submission of  a  new  page
+                         initiates  a  queue  run without waiting
+                         for the normal sleep counter (set by the
+                         -q  option).   If  false,  the  page  is
+                         queued and the server waits for the time
+                         remaining  on the sleep counter (if any)
+                         before starting another queue run.   The
+                         default is true.
+
+          lockdir        The  location  of  the  lock  directory.
+                         This keyword may be used to override the
+                         compiled in location of the lock  direc-
+                         tory.   It should rarely be necessary to
+                         specify this keyword.
+
+          snpptimeout    The number of seconds  to  wait  for  an
+                         SNPP command before terminating the con-
+                         nection.  The default is 60 seconds.
+
+          queuedir       The location of the page  queue.   There
+                         is  no  default  queue  directory;  this
+                         option must be specified in  the  confi-
+                         guration file.
+
+          modem          The start of a  modem  definition.   The
+                         argument  to this keyword is the name of
+                         a  modem  device  (e.g.  hayes).    This
+
+
+
+Thomas Dwyer III      Last change: 05/08/99                     6
+
+
+
+
+
+
+User Commands                                            qpage(1)
+
+
+
+                         keyword  has  the  following  minor key-
+                         words:
+
+                         text           Optional  text  specified
+                                        by   the   administrator.
+                                        This text may not contain
+                                        whitespace.      However,
+                                        underscores are converted
+                                        to  spaces when the value
+                                        of this keyword is  read.
+                                        This   keyword   is   not
+                                        interpreted by  QuickPage
+                                        and  is only provided for
+                                        the administrator's  con-
+                                        venience.
+
+                         device         The name  of  the  device
+                                        the  modem  is physically
+                                        connected  to,  such   as
+                                        /dev/cua/a.   There is no
+                                        default   device;    this
+                                        option  must be specified
+                                        in   the    configuration
+                                        file.
+
+                         initcmd        The  initialization  com-
+                                        mand for this modem.  The
+                                        initialization    command
+                                        must  cause  the modem to
+                                        respond  with  OK.    The
+                                        default    initialization
+                                        command is ATZ.
+
+                         dialcmd        The dial command for this
+                                        modem.   The dial command
+                                        specified here should not
+                                        include  a  phone number.
+                                        The default dial  command
+                                        is ATDT.
+
+          service        The start of a  paging  service  defini-
+                         tion.   The  argument to this keyword is
+                         the name of the paging  service.   If  a
+                         service named default exists, the values
+                         of  its  minor  keywords  are  used   as
+                         defaults  for  all other service defini-
+                         tions.  This keyword has  the  following
+                         minor keywords:
+
+                         text           Optional  text  specified
+                                        by   the   administrator.
+                                        This text may not contain
+
+
+
+Thomas Dwyer III      Last change: 05/08/99                     7
+
+
+
+
+
+
+User Commands                                            qpage(1)
+
+
+
+                                        whitespace.      However,
+                                        underscores are converted
+                                        to  spaces when the value
+                                        of this keyword is  read.
+                                        This   keyword   is   not
+                                        interpreted by  QuickPage
+                                        and  is only provided for
+                                        the administrator's  con-
+                                        venience.
+
+                         device         One  or  more  names   of
+                                        modem  definitions.  Mul-
+                                        tiple   modems   may   be
+                                        specified  by  separating
+                                        them with commas.  During
+                                        a  queue  run,  QuickPage
+                                        will try  each  modem  in
+                                        the  list  until it finds
+                                        one that  can  be  opened
+                                        successfully  (i.e. it is
+                                        not already being used by
+                                        a  dialin user or by some
+                                        other   process).     The
+                                        remaining  modems  in the
+                                        list  will   be   ignored
+                                        until  the next queue run
+                                        when  the  list  will  be
+                                        searched  again.   In  no
+                                        event will QuickPage ever
+                                        have  more than one modem
+                                        open at any  given  time;
+                                        pages   queued  for  dif-
+                                        ferent services  are  not
+                                        processed   concurrently.
+                                        For backward  compatibil-
+                                        ity     with     previous
+                                        releases, a physical dev-
+                                        ice path may be specified
+                                        here.  However, this will
+                                        not   be   supported   in
+                                        future  releases.   Modem
+                                        definitions   should   be
+                                        used instead.
+
+                         dialcmd        [obsolete]  The   command
+                                        that the modem should use
+                                        to connect to the  remote
+                                        paging   service.    This
+                                        keyword is  accepted  for
+                                        backward    compatibility
+                                        and will not be supported
+                                        in  future  releases.  If
+
+
+
+Thomas Dwyer III      Last change: 05/08/99                     8
+
+
+
+
+
+
+User Commands                                            qpage(1)
+
+
+
+                                        specified,  this  keyword
+                                        overrides   the   dialcmd
+                                        keyword  in   all   modem
+                                        specifications   used  by
+                                        this service.
+
+                         phone          The phone number  of  the
+                                        paging    service.    The
+                                        specified  phone   number
+                                        will  be  appended to the
+                                        modem's dialcmd when cal-
+                                        ling the paging service.
+
+                         password       The password to use  when
+                                        logging  into  the remote
+                                        paging service.  The  IXO
+                                        specification defines the
+                                        password as  an  optional
+                                        six             character
+                                        alphanumeric      string.
+                                        Most  paging  services in
+                                        the United States do  not
+                                        require  a password.  The
+                                        default   is   an   empty
+                                        string ("").
+
+                         baudrate       The speed  to  use  while
+                                        talking   to  the  modem.
+                                        The default is 300 baud.
+
+                         parity         The parity to use  (even,
+                                        odd, or none) while talk-
+                                        ing to  the  modem.   The
+                                        default is even.
+
+                         maxmsgsize     The  maximum  number   of
+                                        characters  allowed  in a
+                                        single   page    segment.
+                                        This  size  includes  the
+                                        message  prefix   and   9
+                                        bytes  of  protocol over-
+                                        head.  The default is  80
+                                        characters.
+
+                         maxpages       The  maximum  number   of
+                                        page   segments  to  send
+                                        when  a  message  exceeds
+                                        maxmsgsize.  The value of
+                                        this   option   must   be
+                                        between    1    and    9,
+                                        inclusive.   The  default
+                                        is 9 page segments.
+
+
+
+Thomas Dwyer III      Last change: 05/08/99                     9
+
+
+
+
+
+
+User Commands                                            qpage(1)
+
+
+
+                         maxtries       The number  of  times  to
+                                        attempt  sending  a  page
+                                        before giving up.  If the
+                                        modem  is  busy (i.e. tip
+                                        or cu is currently  using
+                                        it)   or   if  the  modem
+                                        returns BUSY in  response
+                                        to  the dial command, the
+                                        counter  is  not   incre-
+                                        mented.  Thus a busy ser-
+                                        vice will cause QuickPage
+                                        to  retry  the  page for-
+                                        ever.  The default is 6.
+
+                         identfrom      (true or false) This key-
+                                        word specifies whether to
+                                        use the ident response as
+                                        the  message prefix if no
+                                        CALLerid SNPP command  is
+                                        received.  The default is
+                                        true.
+
+                         allowpid       (true or false) This key-
+                                        word   specifies  whether
+                                        the QuickPage daemon will
+                                        accept  numeric  pagerids
+                                        for pagers not  specified
+                                        in    the   configuration
+                                        file.  The  default  ser-
+                                        vice  is  used  for  such
+                                        pagerids unless the  user
+                                        explicitly chooses a dif-
+                                        ferent   service.     The
+                                        default  for this keyword
+                                        is false.
+
+                         msgprefix      (true or  false)  Whether
+                                        to  prepend  the sender's
+                                        name (the CALLerid infor-
+                                        mation)  to the beginning
+                                        of  each  page   segment.
+                                        This  keyword  should  be
+                                        set to false for  service
+                                        definitions    used   for
+                                        numeric   pagers.     The
+                                        default  for this keyword
+                                        is true.
+
+          pager          The start of a  pager  definition.   The
+                         argument to this keyword is the username
+                         associated with the pager.   This  user-
+                         name  will be specified by the -p option
+
+
+
+Thomas Dwyer III      Last change: 05/08/99                    10
+
+
+
+
+
+
+User Commands                                            qpage(1)
+
+
+
+                         on the command line when running  Quick-
+                         Page  in  client mode.  This keyword has
+                         the following minor keywords:
+
+                         text           Optional  text  specified
+                                        by   the   administrator.
+                                        This text may not contain
+                                        whitespace.      However,
+                                        underscores are converted
+                                        to  spaces when the value
+                                        of this keyword is  read.
+                                        Pager specifications con-
+                                        taining this keyword will
+                                        be  listed  by  the  XWHO
+                                        SNPP  command.   See  the
+                                        NOTES  section  below for
+                                        more information.
+
+                         pagerid        The pagerid sent  to  the
+                                        remote paging service for
+                                        this pager.
+
+                         service        The  default  service  to
+                                        use for this pager.
+
+          group          The start of a  group  definition.   The
+                         argument  to this keyword is the name of
+                         a new page group.  This keyword has  the
+                         following minor keywords:
+
+                         text           Optional  text  specified
+                                        by   the   administrator.
+                                        This text may not contain
+                                        whitespace.      However,
+                                        underscores are converted
+                                        to  spaces when the value
+                                        of this keyword is  read.
+                                        Group specifications con-
+                                        taining this keyword will
+                                        be  listed  by  the  XWHO
+                                        SNPP  command.   See  the
+                                        NOTES  section  below for
+                                        more information.
+
+                         member         A member of  this  group.
+                                        The  member  must  have a
+                                        valid pager entry  before
+                                        this   group  definition.
+                                        An optional duty schedule
+                                        (see below) may be speci-
+                                        fied.  This  keyword  may
+                                        appear   multiple   times
+
+
+
+Thomas Dwyer III      Last change: 05/08/99                    11
+
+
+
+
+
+
+User Commands                                            qpage(1)
+
+
+
+                                        within a single group.
+
+     The service named  "default"  always  exists  (even  if  not
+     specified  in  the  configuration  file) and has the default
+     values listed above.  However, the default  service  may  be
+     redefined in the configuration file if desired.
+
+     Member definitions within a page group have the syntax:
+
+          member=name[/DayStart-End]
+
+     Where  the  square  brackets  indicate  an   optional   duty
+     schedule.  The duty schedule has the same syntax as the Time
+     parameter in the UUCP Systems file:  Day is a list of  case-
+     sensitive  weekday abbreviations (e.g. MoTuTh), Start is the
+     start time (e.g. 800), and End is the end time (e.g.  1700).
+     The word Any is synonymous with SuMoTuWeThFrSa. Midnight may
+     be represented as either 0 or 2400.  The time range must not
+     span  across  midnight.  A slash is required to separate the
+     duty schedule from the member name.  Multiple member defini-
+     tions  for the same person with different duty schedules are
+     permitted  (see  the  example  below).    Overlapping   duty
+     schedules  for the same person within a group will not cause
+     duplicate pages to be sent to that person.  See the  follow-
+     ing example configuration file:
+
+          #
+          # QuickPage configuration file
+          #
+          administrator=tomiii@qpage.org
+          identtimeout=5
+          queuedir=/var/spool/qpage
+
+          modem=ttya
+               device=/dev/cua/a
+
+          # use the S7 modem register to set a connection timeout
+          modem=ttyb
+               device=/dev/cua/b
+               initcmd=ATS7=45V1Q2&K0&M0
+
+          service=airtouch
+               device=ttya,ttyb
+               phone=9,9500572
+               baudrate=1200
+               allowpid=yes
+               maxtries=6
+
+          service=skytel
+               device=ttya
+               phone=9,18007596366
+
+
+
+
+Thomas Dwyer III      Last change: 05/08/99                    12
+
+
+
+
+
+
+User Commands                                            qpage(1)
+
+
+
+          service=supercom
+               device=ttya
+               phone=9,4879889
+
+          pager=tomiii
+               pagerid=1234567
+               service=skytel
+
+          pager=ginger
+               pagerid=5551212
+               service=skytel
+
+          pager=tony
+               pagerid=711
+               service=supercom
+
+          group=sysadmin
+               member=tomiii/MoWeFr800-1700
+               member=tony/TuTh800-1700
+               member=tony/SaSu900-1600
+
+NOTES
+     The order of the command line options is important.  The -a,
+     -c, and -l options must precede the pagerids they refer to.
+
+     The -p option resets -a, -c, and -l to their default  values
+     after it is processed.  If this behavior is not desired, use
+     -P instead.
+
+     All 8-bit characters are stripped to 7 bits before they  are
+     transmitted  to the paging service, regardless of the parity
+     setting defined in the configuration file.  Also,  all  con-
+     trol  characters  (ASCII  values  between 0x00 and 0x20) are
+     "escaped" as specified by the IXO/TAP protocol.  Escaping is
+     done  by  converting  each  control character into two bytes
+     consisting of a SUB (0x1A) character followed by the  print-
+     able  ASCII  character  formed  by  adding 0x40 to the ASCII
+     value of the control character.  Thus, Ctrl-A is transmitted
+     as the two-byte sequence 0x1A, 0x41.
+
+     The QuickPage daemon listens for incoming  SNPP  connections
+     and periodically processes the page queue.  A separate child
+     process is created on demand to handle each incoming request
+     and each queue run.
+
+     After a page is accepted, the child  sends  SIGUSR1  to  its
+     parent  forcing  it to start a queue run immediately without
+     waiting for the time specified by -q.  If desired, this sig-
+     nal  can  be  suppressed  using  the  "synchronous"  keyword
+     described above.
+
+
+
+
+
+Thomas Dwyer III      Last change: 05/08/99                    13
+
+
+
+
+
+
+User Commands                                            qpage(1)
+
+
+
+     The page queue is locked during queue runs to prevent multi-
+     ple processes from competing for modem resources.
+
+     The QuickPage SNPP daemon supports a proprietary  XWHO  com-
+     mand  not  documented  in  the  official  SNPP  protocol  as
+     described in RFC-1861.  XWHO takes no arguments and  returns
+     a multi-line response of the form:
+
+          214 pager1 text1
+          214 pager2 text2
+          214 pager3 text3
+           .
+           .
+           .
+          214 pagerN textN
+          250
+
+     where the first word after the 214 response code is the name
+     of  a  pager  or  page  group,  followed by the value of the
+     corresponding text keyword (with  underscores  converted  to
+     spaces)  from  the  configuration  file.   Pager  and  group
+     specifications that do not have the text keyword defined  in
+     the  configuration  file  will  not  be included in the XWHO
+     response.  The purpose of the XWHO command is to allow  SNPP
+     clients  to present users with a list of possible recipients
+     and their names  or  descriptions.   XWHO  is  supported  by
+     QuickPage  in  an  attempt  to  overcome  the  current  SNPP
+     protocol's deficiency.  If the protocol is ever  revised  in
+     the  future  to  include this functionality, support for the
+     XWHO command will be dropped in favor of whatever facilities
+     are  specified  at  that  time.  Software developers writing
+     their own SNPP clients should be advised that the XWHO  com-
+     mand  is  not stable and may be removed from future releases
+     of QuickPage without notice.
+
+     If the CALLerid information received by the QuickPage daemon
+     contains  the '@' character, it is truncated at that charac-
+     ter before being prepended to messages.  However, it is used
+     as-is for the destination address when sending e-mail notif-
+     ication for high-priority recipients.
+
+     Due to the protocol limitations of SNPP,  QuickPage  derives
+     e-mail notification addresses from the CALLerid information.
+     Since the CALLerid information might be  bogus,  all  e-mail
+     notifications are sent using a null reverse path.  This will
+     prevent error messages from being generated by the mail sys-
+     tem if a bogus address is used for e-mail notification.
+
+     If the server does not receive a CALLerid command  (sent  by
+     the QuickPage client unless -f"" is specified on the command
+     line) notification messages will not be sent, regardless  of
+     the specified service level.
+
+
+
+Thomas Dwyer III      Last change: 05/08/99                    14
+
+
+
+
+
+
+User Commands                                            qpage(1)
+
+
+
+     When the -m flag is used to send a high-priority  page,  the
+     status  notification  is  sent  to the return address in the
+     original e-mail message unless overridden by the -f option.
+
+     The length of SNPP commands is limited only by the amount of
+     memory available to QuickPage.
+
+     QuickPage uses a timeout of 255 seconds while waiting for  a
+     connection  from the remote modem.  This allows the adminis-
+     trator to specify an  appropriate  timeout  by  setting  the
+     modem's S7 register in the dial command.
+
+     The modem must control the CD (carrier-detect) line.  Other-
+     wise,  the  on/off hook status of the modem cannot be deter-
+     mined.  This is especially important if more than one paging
+     service  is used since QuickPage must be able to detect when
+     it's safe to send dial commands to the modem.
+
+FILES
+     /etc/qpage.cf
+
+SEE ALSO
+     RFC-1861
+
+KNOWN BUGS
+     Pages are not queued on the client side.  As a result, if no
+     servers  are  available  to the client at the time a page is
+     submitted, an error message is printed and the page is  dis-
+     carded.
+
+     Pages received after a queue run has  started  will  not  be
+     processed until the following queue run.
+
+     The default service requires a phone keyword (just like  the
+     rest  of  the service definitions), even if no pager entries
+     specifically reference the default service.
+
+     Because QuickPage must read the configuration file to deter-
+     mine the location of the page queue, the -Q option will only
+     work for users with appropriate access to the  modems,  page
+     queue, and lock directory.
+
+     Please send additional bug reports to tomiii@qpage.org.
+
+AUTHOR
+     QuickPage was written by Thomas Dwyer III <tomiii@qpage.org>
+     and is provided to the internet community free of charge for
+     non-commercial use (i.e.  QuickPage may not be used for pro-
+     fit in any way without prior written permission.)
+
+     Copyright (c) 1995-1999 Thomas Dwyer III
+
+
+
+
+Thomas Dwyer III      Last change: 05/08/99                    15
+
+
+

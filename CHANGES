@@ -1,0 +1,273 @@
+
+
+		Changes to QuickPage from v3.2 to v3.3
+		---------------------------------------
+
+	- Building QuickPage has been greatly simplified by GNU
+	  autoconf.  All you need to do is unpack the tar file,
+	  type "./configure" and then type "make".  It's that simple.
+
+	- QuickPage now has builtin support for Wietse Venema's
+	  "tcp_wrappers" package.  See the INSTALL guide for more
+	  information.
+
+	- In the configuration file, groups and pagers are no longer
+	  permitted to have the same names.  Every group and pager
+	  entry must have a unique name.  This should help administrators
+	  detect configuration errors more easily.
+
+	- When invoking sendmail to sending status notifications, 
+	  the end of the message is now signified by closing standard
+	  input to the child instead of writing the <CR>.<CR> sequence.
+	  This should allow QuickPage to work with programs other than
+	  sendmail (such as the qmail).
+
+	- Null characters received from the remote paging service
+	  are now ignored.
+
+	- QuickPage now gives up after 5 attempts when trying to log
+	  into the paging service.  Previous versions used to retry
+	  forever or until the remote modem disconnected.
+
+	- An initial carriage return is sent, followed by a 1 second
+	  delay, before sending the initialization string to the modem.
+	  Without this, the initialization command sometimes failed on
+	  some modems due to unclean disconnects from previous
+	  connections.
+
+	- Multiple modems are supported.  A new "modem" keyword
+	  in the configuration file allows modem-specific
+	  initialization and dialing commands to be associated with
+	  each modem.  A paging service may include references to
+	  multiple modem definitions.  This does not mean pages
+	  will be processed in parallel--see the man page for details.
+
+	- A new "synchronous" major keyword specifies whether new
+	  pages should be processed immediately or whether the server
+	  should wait until the normal sleep time (-q argument) as
+	  expired.  The default is true (process new pages immediately).
+
+	- A new "lockdir" major keyword can be used to override the
+	  compiled in lock directory.
+
+	- A new "pidfile" major keyword causes the server to write its
+	  process ID to the specified file.
+
+	- A new "sigfile" major keyword specifies an alternate signature
+	  to be used in e-mail status notification messages.
+
+	- A new "initcmd" minor keyword is allowed in the modem and
+	  service specifications.
+
+	- A new "phone" minor keyword is allowed in the service
+	  specification.  If present, the value of this keyword
+	  will be appended to the dialcmd when dialing the modem.
+
+	- A new "msgprefix" minor keyword is allowed in the service
+	  specification to indicate whether the sender's name is
+	  prefixed to each message segment.
+
+	- The "dialcmd" minor keyword used for service definitions is now
+	  obsolete.  It is still supported in this release for backward
+	  compatibility, but it will not be supported in future releases.
+	  Instead, use the new "phone" keyword in combination with a
+	  modem specification.
+
+	- Better error checking is done when the configuration file is
+	  being read.
+
+	- A "default" paging service now always exists, even if it
+	  is not specified in the configuration file.  Compiled in
+	  default settings for the default service may be overridden
+	  in the configuration file.
+
+	- The configuration file now supports the "include" keyword
+	  to specify the name of another configuration file that should
+	  be inserted at that point.  This allows the administrator
+	  to split the configuration file into multiple files if
+	  desired.
+
+	- The page queue is locked during queue runs so that only
+	  one child can process the queue at a time.
+
+	- Bad pages are renamed to Bxxxxxxx to make it easier for
+	  administrators to locate and examine/remove them.
+
+	- Lock files are now created with mode 666, regardless of
+	  the umask in effect when QuickPage is started.
+
+	- Previous versions read the configuration file many times
+	  (for each SNPP connection, each queue run, etc.).  Now,
+	  the configuration file is only read during startup and
+	  on receipt of SIGHUP.
+
+	- A new SNPP command, XWHO, can be used by clients to
+	  determine which pagers are supported by the server.
+	  This command is not part of the official SNPP protocol
+	  as specified in RFC-1861 and it is only implemented here
+	  to overcome the current protocol's deficiency.  If the
+	  protocol is ever revised in the future to include this
+	  functionality, support for the XWHO command will be
+	  dropped in favor of whatever facilities are specified
+	  at that time.  Do not consider XWHO a stable command.
+	  It may go away in a future version of QuickPage without
+	  notice.
+
+	- The modem, service, pager, and group major keywords now
+	  allow a "text" minor keyword that can be used to associate
+	  an arbitrary text string with each of these entries.  Any
+	  pager or group entry that contains a text string will be
+	  shown by the SNPP "XWHO" command (not an official command
+	  specified by RFC-1861).
+
+	- Previous versions forked two daemon processes, one to handle
+	  incoming SNPP connections and another one to process the page
+	  queue.  Starting with v3.3, QuickPage only uses one main daemon
+	  process which forks short-term child processes when necessary.
+
+	- The return code of the client now correctly reflects whether
+	  the page was successfully transmitted to the server.
+
+	- Characters are stripped to 7 bits before transmitting them
+	  to the paging service.  Also, control characters are escaped
+	  by first sending 0x1A and then sending the ASCII character
+	  obtained by adding 0x40 to the ASCII value of the control
+	  character.  This is required by the IXO/TAP protocol.
+
+	- When using interactive mode with the -i flag, page groups
+	  are now expanded correctly.
+
+	- QuickPage now prints an error message if the -C option is
+	  specified on the client side.
+
+	- Root privileges are always dropped, even during interactive
+	  mode.  Too many people were being confused when QuickPage
+	  worked with the -i flag but failed in normal client/server
+	  mode.
+
+	- If standard input is not a tty, QuickPage assumes it is
+	  reading input from a pipe and it will not print any input
+	  prompts.
+
+	- A negative argument to the -q flag on the command line will
+	  start an SNPP daemon without doing any queue processing.
+	  Incoming pages will be queued and will not be forwarded to a
+	  paging service.  This is not very useful but it may come in
+	  handy during debugging.
+
+	- A zero argument to the -q flag (i.e. -q0) will cause QuickPage
+	  to process the queue one time and exit.  This can be handy
+	  for forcing queue runs without enabling SNPP services.
+
+	- A year-2000 bug was fixed.  Prior to v3.3, if the -a
+	  option was used on the command line to specify a hold
+	  time after Dec 31 23:59:59 1999, the time was transmitted
+	  to the server incorrectly, causing the server to reject
+	  the page.
+
+	- Many minor bug fixes are included.
+
+
+		Changes to QuickPage from v3.1 to v3.2
+		---------------------------------------
+
+	- The QuickPage source is totally lint free (at least when
+	  compiled on Solaris 2.x systems).
+
+	- An ANSI compiler (such as gcc) is now required for building
+	  QuickPage.  I really didn't want to do this, but one of my
+	  goals was to make QuickPage "lint free" and I just couldn't
+	  do that with varargs without making the function declarations
+	  ANSI compliant.  I apologize for any hardships this may cause.
+	  However, I suspect most people are using ANSI compilers anyway,
+	  this hopefully won't be much of a problem.
+
+	- The long awaited "e-mail status notification" is here.  Pages
+	  submitted with a high priority (i.e. level 0) cause e-mail to
+	  be sent to the submitter whenever a page succeeds or fails.
+
+	- A new keyword ("administrator") can be used in the configuration
+	  file to notify the QuickPage administrator of failed pages.
+
+	- Page groups are now supported.  A new keyword ("group") can
+	  be used in the configuration file to specify page groups.
+	  Group members can have optional duty schedules so they won't
+	  be paged unless they're on duty.
+
+	- A new -P option like was added which works exactly like the
+	  existing -p option, with the exception that any -a, -c, and -l
+	  options are not reset to their default values.
+
+	- A bug in previous versions of QuickPage required the "password"
+	  keyword in a service specification to start with "1" in order
+	  to comply with the IXO/TAP protocol specification.  This typo
+	  has been fixed and a service password is no longer required.
+	  Any "password=1" entries in qpage.cf should be removed unless
+	  you know for a fact your service requires them.
+
+	- Pages now have unique message IDs which can be used to track
+	  status via syslog messages.
+
+	- The -d flag now keeps the daemon in the foreground and prints
+	  messages to stderr instead of logging them via syslog().
+
+	- Using the -i flag as root now prints a warning message telling
+	  the user that daemon mode may behave differently since it doesn't
+	  run as root.
+
+	- A new -Q flag can be used on the QuickPage server to list all
+	  pages currently in the page queue.
+
+	- Queue files now contain the submitter's hostname.
+
+	- A "client only" version is now supported which should compile
+	  on just about every platform.
+
+	- Previously, if a page to multiple recipients failed for one
+	  recipient, everyone would get a another copy on successive
+	  retries.  This has been fixed.
+
+	- The "goodtries" counter was written to the queue file correctly
+	  but it was ignored when the file was read.  This caused pages to
+	  be retried forever, regardless of the "maxtries" setting in the
+	  configuration file.  This has been fixed.
+
+	- It is no longer a fatal error for the client if the SNPP server
+	  refuses to accept CALLerid information.
+
+	- Use 8-bit bytes if not using parity.
+
+	- Service names are included in log messages.
+
+	- The QuickPage source code is now more compatible with other
+	  operating systems.
+
+	- The code which parses e-mail messages (the -m option) is now
+	  more robust.
+
+	- The SEND command now performs a RESEt before returning.
+
+	- The LEVEl command now returns a valid response code.
+
+
+		Changes to QuickPage from v3.0 to v3.1
+		---------------------------------------
+
+	- A new -m option tells the client to read an e-mail message
+	  from standard input.  Apparently lots of people wanted this
+	  even though it goes against the intent of RFC-1861.
+
+	- Multiple SNPP servers are permitted for redundancy.
+
+	- The argument to the -a option can now be specified either as
+	  YYMMDDHHMMSS or by using the previous syntax.
+
+	- The time specified by the HOLDuntil command is now computed
+	  correctly when a timezone is supplied.
+
+	- Some of the messages returned by the SNPP server are now
+	  slightly more intuitive.
+
+	- Whitespace in the CALLerid argument is now preserved.
+
+	- Pages longer than 1024 bytes are now handled correctly.

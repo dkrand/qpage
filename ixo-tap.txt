@@ -1,0 +1,662 @@
+From: mc/G=Brad/S=Hicks/OU=0205925@mhs.attmail.com
+Date: 11 Feb 93 22:58:48 GMT
+Subject: IXO.TAP.protocol part 1 
+ 
+
+TRANSCRIBER'S FOREWORD: Items like [1] are their footnotes, and usually
+follow the table they're in.  Items like {1} are my notes, based on my
+experience implementing from this crummy document, and follow at the end.
+If you have questions about this, consult your paging vendor's linesmen or
+engineers, not me. If you just want to say thanks, grumble, or complain,
+you can reach me at mc!Brad_Hicks@mhs.attmail.com, or at
+jbhicks@mcimail.com, or (X400) c=US, admd=ATTMail, prmd=MasterCard,
+sn=Hicks, gn=Brad.
+   I work for MasterCard as a senior PC specialist, and that's why their
+name appears in my X.400 address. This document is 100% my responsibility;
+if you have a beef, it's with me, not with them.
+ 
+ 
+Glenayre Electronics
+GLP-3000-180
+Issue 5: 91/01/30
+ 
+Print Date: 2/13/91
+Copyright (c) 1991 Glenayre Electronics. All Rights Reserved.
+Pages 7-1 through 7-12
+ 
+ 
+7. TELOCATOR ALPHANUMERIC PROTOCOL (TAP)
+ 
+7.1 Introduction
+ 
+In order to decrease holding times on input lines to alphanumeric systems,
+it was desirable to promote input devices which will allow off-line entry
+of paging information and dump this data quickly after connection to the
+central paging terminal. This protocol was known as the IXO alphanumeric
+protocol until it was adopted for the input of paging requests. It is now
+referred to as the Telocator Alphanumeric Protocol (TAP).
+ 
+Table 7-1 Call Delivery Sequence
+ 
+    +----------------------+----------------------+----------------------+
+    | REM. ENTRY DEV. DOES | PAGING CENTRAL DOES  | COMMENTS             |
++---+----------------------+----------------------+----------------------+
+| 1 | Off hook-access DDD  |                      |                      |
+|   | line.                |                      |                      |
+|   | Await dial tone.     |                      |                      |
+|   | Dial stored access   |                      |                      |
+|   | number               | Ring Answer          |                      |
++---+----------------------+----------------------+----------------------+
+| 2 | Carrier up           | Carrier up           |                      |
++---+----------------------+----------------------+----------------------+
+| 3 | "<CR>" [1]           |                      | <CR> is repeated at  |
+|   |                      |                      | two second intervals |
+|   |                      |                      | until paging central |
+|   |                      |                      | responds with ID= at |
+|   |                      |                      | correct baud rate or |
+|   |                      |                      | until three trans-   |
+|   |                      |                      | missions have been   |
+|   |                      |                      | completed. (This     |
+|   |                      |                      | step exists to allow |
+|   |                      |                      | for possible future  |
+|   |                      |                      | baud rate recogni-   |
+|   |                      |                      | tion).               |
+|   |                      |                      |                      |
+|   |                      |                      | Some systems have    |
+|   |                      |                      | chosen to send ID=   |
+|   |                      |                      | from the central if  |
+|   |                      |                      | they do not receive  |
+|   |                      |                      | <CR> in about two    |
+|   |                      |                      | seconds. This vari-  |
+|   |                      |                      | ation appears to be  |
+|   |                      |                      | acceptable as the    |
+|   |                      |                      | central continues to |
+|   |                      |                      | respond to <CR>s     |
+|   |                      |                      | with ID= s.          |
++---+----------------------+----------------------+----------------------+
+| 4 |                      | "ID= " {1}           | Request for ID re-   |
+|   |                      |                      | turned within one    |
+|   |                      |                      | second of receipt of |
+|   |                      |                      | <CR>. Paging central |
+|   |                      |                      | may, at its option,  |
+|   |                      |                      | send <CR> or <CR><LF>|
+|   |                      |                      | after ID=.           |
+|   |                      |                      |                      |
+|   |                      |                      | Paging central may   |
+|   |                      |                      | optionally choose to |
+|   |                      |                      | send ID= if it does  |
+|   |                      |                      | not receive <CR>     |
+|   |                      |                      | after an appropriate |
+|   |                      |                      | waiting time.        |
++---+----------------------+----------------------+----------------------+
+ 
+[1] All quotation marks or the symbols <> shown are used for notation
+    and are not transmitted.
+ 
+Two options exist at this point:
+ 
+* Automatic Mode (see section 5A)
+* Manual Mode (see section 5M)
+ 
+    +----------------------+----------------------+----------------------+
+    | REM. ENTRY DEV. DOES | PAGING CENTRAL DOES  | COMMENTS             |
++---+----------------------+----------------------+----------------------+
+| 5 | For automatic remote |                      | <ESC> signifies      |
+| A | entry devices.       |                      | entry device intends |
+|   |                      |                      | to talk in automatic |
+|   | "<ESC>SST" {2}       |                      | dump mode. SS is a   |
+|   |                      |                      | set of two alpha-    |
+|   | Typical Example:     |                      | numeric characters   |
+|   | "<ESC>PG1"           |                      | signifying a type of |
+|   |                      |                      | service to be ac-    |
+|   |                      |                      | cessed.              |
+|   |                      |                      |                      |
+|   |                      |                      | For a paging service |
+|   |                      |                      | where:               |
+|   |                      |                      | Field 1 = 'Pager ID' |
+|   |                      |                      | and                  |
+|   |                      |                      | Field 2 = 'Message'. |
+|   |                      |                      |                      |
+|   |                      |                      | SS will be sent as   |
+|   |                      |                      | 'PG'.                |
+|   |                      |                      |                      |
+|   |                      |                      | Where T is a single  |
+|   |                      |                      | alphanumeric char-   |
+|   |                      |                      | acter relate to the  |
+|   |                      |                      | type of terminal or  |
+|   |                      |                      | device attempting to |
+|   |                      |                      | send the message.    |
+|   |                      |                      |                      |
+|   |                      |                      | T = '1' is a cate-   |
+|   |                      |                      | gory using the same  |
+|   |                      |                      | protocol. The PETs   |
+|   |                      |                      | and IXO devices are  |
+|   |                      |                      | members of this      |
+|   |                      |                      | category.            |
+|   |                      |                      | T = '7,8,9' are re-  |
+|   |                      |                      | served for wild card |
+|   |                      |                      | terminals or devices |
+|   |                      |                      | which may relate to  |
+|   |                      |                      | a specific users'    |
+|   |                      |                      | system.              |
++---+----------------------+----------------------+----------------------+
+| 6 | "PPPPPP<CR>" {3}     |                      | This 6-character     |
+|   |                      |                      | alphanumeric pass-   |
+|   | GL-3000 will ignore  |                      | word comes from      |
+|   | password             |                      | automatic terminals. |
+|   |                      |                      | (Password is optional|
+|   | Typical password for |                      | and is, in general,  |
+|   | IXO is "000000"      |                      | reserved for future  |
+|   |                      |                      | services. Password   |
+|   |                      |                      | may be interpreted   |
+|   |                      |                      | as either a caller   |
+|   |                      |                      | ID or a system entry |
+|   |                      |                      | key. Length of pass- |
+|   |                      |                      | word, when used, may |
+|   |                      |                      | be different in some |
+|   |                      |                      | systems.)            |
+|   |                      |                      |                      |
+|   |                      |                      | When an incorrect    |
+|   |                      |                      | logon sequence       |
+|   |                      |                      | beginning with <ESC> |
+|   |                      |                      | is received, the     |
+|   |                      |                      | paging central may   |
+|   |                      |                      | respond with an ID=  |
+|   |                      |                      | if it requires a     |
+|   |                      |                      | retransmission.      |
++---+----------------------+----------------------+----------------------+
+|   |                      | "Message sequence    | Logon accepted       |
+|   |                      | <CR><ACK><CR>"       |                      |
+|   |                      |                      |                      |
+|   |                      | or                   | or                   |
+|   |                      |                      |                      |
+|   |                      | "Message sequence    | Requested again      |
+|   |                      | <CR><NAK><CR>"       |                      |
+|   |                      |                      |                      |
+|   |                      | or                   | or                   |
+|   |                      |                      |                      |
+|   |                      | "Message sequence    | Forced disconnect    |
+|   |                      | <CR><ESC><EOT><CR>"  |                      |
++---+----------------------+----------------------+----------------------+
+  * Gl3000 Typical Message Sequence: "Processing - Please Wait" or
+                                     "4 pages sent"             or
+                                     "Bad Phone Line Call Again".
+    +----------------------+----------------------+----------------------+
+    | REMOTE ENTRY         | PAGING CENTRAL DOES  | COMMENTS             |
++---+----------------------+----------------------+----------------------+
+|   |                      |                      | A message sequence   |
+|   |                      |                      | is defined as a      |
+|   |                      |                      | series of short      |
+|   |                      |                      | messages separated   |
+|   |                      |                      | by <CR>s. A <CR>     |
+|   |                      |                      | always follows a     |
+|   |                      |                      | message sequence.    |
+|   |                      |                      | Message sequences    |
+|   |                      |                      | are totally optional.|
++---+----------------------+----------------------+----------------------+
+| 6 |                      | Optional message     | Central may insert   |
+| a |                      | sequence <CR>        | short message        |
+|   |                      |                      | sequence between     |
+|   |                      |                      | steps 6 and 7.       |
++---+----------------------+----------------------+----------------------+
+| 7 |                      | "<ESC> [p <CR>"      | Message go ahead is  |
+|   |                      |                      | sent when paging     |
+|   |                      |                      | central is ready for |
+|   |                      |                      | new information.     |
+|   |                      |                      | The 'p' is in lower  |
+|   |                      |                      | case.                |
++---+----------------------+----------------------+----------------------+
+| 8 | TRANSACTION #1       |                      | A block is up to 256 |
+|   |      : "<STX>        |                      | characters in length,|
+|   |      : FIELD #1 <CR> | {4}                  | with up to 250 char- |
+|   | BLOCK: FIELD #2 <CR> | {5}                  | acters of info, plus |
+|   | #1   :               |                      | 3 control characters |
+|   |      : FIELD #N <CR> |                      | and a 3 character    |
+|   |      : <ETX>         |                      | checksum. The block  |
+|   |      : <CHECKSUM>    |                      | carries one trans-   |
+|   |      : <CR>"         |                      | action (one set of   |
+|   |                      |                      | fields 1 through N)  |
+|   |                      |                      | or a portion of one  |
+|   |                      |                      | transaction. A block |
+|   |                      |                      | may be less than 256 |
+|   |                      |                      | characters to        |
+|   |                      |                      | accommodate short    |
+|   |                      |                      | transactions.        |
++---+----------------------+----------------------+----------------------+
+|   |                      |                      | A field may be any   |
+|   |                      |                      | length and where     |
+|   |                      |                      | necessary may be     |
+|   |                      |                      | continued in         |
+|   |                      |                      | following blocks.    |
+|   |                      |                      | A field always ends  |
+|   |                      |                      | with a <CR>. The     |
+|   |                      |                      | <CR> field delimiter |
+|   |                      |                      | suggests <CR> may    |
+|   |                      |                      | not be used within a |
+|   |                      |                      | field.               |
+|   |                      |                      |                      |
+|   |                      |                      | A block always       |
+|   |                      |                      | begins with an <STX> |
+|   |                      |                      | and ends with a      |
+|   |                      |                      | checksum followed by |
+|   |                      |                      | a <CR>. The char-    |
+|   |                      |                      | acters preceding the |
+|   |                      |                      | checksum depends on  |
+|   |                      |                      | what, if anything,   |
+|   |                      |                      | is continued beyond  |
+|   |                      |                      | the block boundary.  |
+|   |                      |                      |                      |
+|   |                      |                      | The <ETX> is used as |
+|   |                      |                      | a block termination  |
+|   |                      |                      | indicator if a given |
+|   |                      |                      | transaction (fields  |
+|   |                      |                      | 1 through N) ends    |
+|   |                      |                      | within the block     |
+|   |                      |                      | currently being      |
+|   |                      |                      | transmitted.         |
++---+----------------------+----------------------+----------------------+
+|   | TRANSACTION #2 {6}   |                      | The <ETB> is used as |
+|   |      : "<STX>        |                      | a block terminator   |
+|   |      : FIELD #1 <CR> |                      | if the transaction   |
+|   | BLOCK:               |                      | is continued into    |
+|   | #2   : FIELD #J <CR> |                      | the next block, but  |
+|   |      : <ETB>         |                      | the last field in    |
+|   |      : <CHECKSUM>    |                      | the current block is |
+|   |      : <CR>"         |                      | complete.            |
+|   |                      |                      |                      |
+|   |      : "<STX>        |                      | If the last field    |
+|   |      : FIELD #J+1<CR>|                      | within the current   |
+|   | BLOCK:               |                      | block is to be       |
+|   | #3   : FIELD #L <US> |                      | continued in the     |
+|   |      : <CHECKSUM>    |                      | next block, no <CR>  |
+|   |      : <CR>          |                      | is inserted at the   |
+|   |                      |                      | end of the first     |
+|   |      : "<STX>        |                      | portion of the field |
+|   |      : FIELD #L      |                      | and the <US> char-   |
+|   |      : (CONTINUED)   |                      | acter is used as a   |
+|   |      : <CR>          |                      | block termination    |
+|   | BLOCK:               |                      | character. The <CR>  |
+|   | #4   : FIELD <CR>    |                      | terminating the      |
+|   |      : <ETX>         |                      | broken field is sent |
+|   |      : <CHECKSUM>    |                      | at the end of the    |
+|   |      : <CR>          |                      | field in whatever    |
+|   |                      |                      | block the field      |
+|   |                      |                      | actually terminates. |
+|   |                      |                      |                      |
+|   |                      |                      | No limit is estab-   |
+|   |                      |                      | lished within the    |
+|   |                      |                      | protocol itself      |
+|   |                      |                      | regarding the number |
+|   |                      |                      | of transactions, the |
+|   |                      |                      | number of fields or  |
+|   |                      |                      | the number of blocks |
+|   |                      |                      | per field; however,  |
+|   |                      |                      | a particular user    |
+|   |                      |                      | system may have      |
+|   |                      |                      | limits on any of     |
+|   |                      |                      | these items.         |
+|   |                      |                      |                      |
+|   | LAST TRANSACTION     |                      | Some systems may be  |
+|   |                      |                      | limited to one block |
+|   |                      |                      | per transaction and  |
+|   |                      |                      | one transaction per  |
+|   |                      |                      | telephone connection.|
+|   |                      |                      |                      |
+|   |                      |                      | Each checksum is     |
+|   |                      |                      | computed by perfor-  |
+|   |                      |                      | ming the simple      |
+|   |                      |                      | arithmetic sum of    |
+|   |                      |                      | the 7-bit values of  |
+|   |                      |                      | all values of all    |
+|   |                      |                      | characters preceding |
+|   |                      |                      | it in that block.    |
+|   |                      |                      | (This means that the |
+|   |                      |                      | STX and ETB/ETX are  |
+|   |                      |                      | included in the sum).|
+|   |                      |                      | The checksum is then |
+|   |                      |                      | the least signifi-   |
+|   |                      |                      | cant 12 bits of this |
+|   |                      |                      | resulting sum.       |
++---+----------------------+----------------------+----------------------+
+|   |                      |                      | The checksum is      |
+|   |                      |                      | transmitted as three |
+|   |                      |                      | printable ASCII      |
+|   |                      |                      | characters having    |
+|   |                      |                      | values between HEX   |
+|   |                      |                      | 30 and HEX 3F (the   |
+|   |                      |                      | characters 012345678 |
+|   |                      |                      | 9:;<=>?). The most   |
+|   |                      |                      | significant four     |
+|   |                      |                      | bits of the sum are  |
+|   |                      |                      | encoded as the 4 LSB |
+|   |                      |                      | of the third char-   |
+|   |                      |                      | cter. See example.   |
+|   |                      |                      |                      |
+|   |                      |                      | A normal paging sys- |
+|   |      : "<STX>        |                      | tem will have two    |
+|   |      : FIELD #1 <CR> |                      | fields only:         |
+|   | LAST :               |                      |                      |
+|   | BLOCK: FIELD #N <CR> |                      | Field 1 = Pager ID   |
+|   |      : <ETX>         |                      | (normally up to      |
+|   |      : <CHECKSUM>    |                      | eight digits. May    |
+|   |      : <CR>"         |                      | include function and |
+|   |                      |                      | check digit).        |
+|   |                      |                      |                      |
+|   |                      |                      | Field 2 = Message    |
+|   |                      |                      |                      |
+|   |                      |                      | Field 1 or field 2   |
+|   |                      |                      | may be empty. For    |
+|   |                      |                      | example, when a page |
+|   |                      |                      | is tone only, field  |
+|   |                      |                      | 2 will be empty.     |
+|   |                      |                      | Even when empty, a   |
+|   |                      |                      | field is followed by |
+|   |                      |                      | a <CR>. Some systems |
+|   |                      |                      | will reject trans-   |
+|   |                      |                      | actions which have   |
+|   |                      |                      | an empty field 2 for |
+|   |                      |                      | a display page or    |
+|   |                      |                      | transactions which   |
+|   |                      |                      | have an empty field  |
+|   |                      |                      | 1. Other systems are |
+|   |                      |                      | less restrictive.    |
++---+----------------------+----------------------+----------------------+
+|   |                      |                      | The response to each |
+|   |                      |                      | block is one of four:|
+|   |                      |                      |                      |
+|   |                      | "Message sequence    | <ACK><CR> = OK, send |
+|   |                      | <CR> <ACK> <CR>"     | next block.          |
+|   |                      |                      |                      |
+|   |                      | or                   |                      |
+|   |                      |                      |                      |
+|   |                      | "Message sequence    | <NAK><CR> = checksum |
+|   |                      | <CR> <NAK> <CR>"     | or transmission      |
+|   |                      |                      | error, send last     |
+|   |                      |                      | block again.         |
+|   |                      | or                   |                      |
+|   |                      | "Message sequence    | <RS><CR> = abandon   |
+|   |                      | <CR> <RS> <CR>"      | current transaction  |
+|   |                      |                      | and go to next. RS   |
+|   |                      |                      | may occur when the   |
+|   |                      |                      | checksum is OK, but  |
+|   |                      |                      | the current trans-   |
+|   |                      |                      | action violates a    |
+|   |                      |                      | system rule. At the  |
+|   |                      |                      | option of the system,|
+|   |                      |                      | it may occur in      |
+|   |                      |                      | other cases.         |
+|   |                      | or                   |                      |
+|   |                      |                      |                      |
+|   |                      | "Message sequence    | <ESC><EOT><CR> =     |
+|   |                      | <CR> <ESC> <EOT>     | begin disconnect.    |
+|   |                      | <CR>"                |                      |
+|   |                      |                      | Any of the responses |
+|   |                      |                      | may have an optional |
+|   |                      |                      | message sequence     |
+|   |                      |                      | before them,         |
+|   |                      |                      | although the system  |
+|   |                      |                      | designer should      |
+|   |                      |                      | understand the con-  |
+|   |                      |                      | sequences to the     |
+|   |                      |                      | user with all        |
+|   |                      |                      | planned entry        |
+|   |                      |                      | devices.             |
++---+----------------------+----------------------+----------------------+
+|   |                      |                      | It is expected that  |
+|   |                      |                      | many systems will    |
+|   |                      |                      | save their message   |
+|   |                      |                      | sequence responses   |
+|   |                      |                      | until immediately    |
+|   |                      |                      | before disconnect.   |
+|   |                      |                      | For some entry       |
+|   |                      |                      | devices, it may also |
+|   |                      |                      | be desirable that    |
+|   |                      |                      | messages describing  |
+|   |                      |                      | non-checksum errors  |
+|   |                      |                      | associated with a    |
+|   |                      |                      | particular trans-    |
+|   |                      |                      | action in a PG       |
+|   |                      |                      | service will begin   |
+|   |                      |                      | with the letter ID   |
+|   |                      |                      | followed by the      |
+|   |                      |                      | contents of field 1  |
+|   |                      |                      | for that transaction.|
++---+----------------------+----------------------+----------------------+
+| 9 | "<EOT> <CR>"         |                      | After reception of   |
+|   |                      |                      | an <ACK> or <RS> for |
+|   |                      |                      | the last transaction |
+|   |                      |                      | in a given service,  |
+|   |                      |                      | the entry device     |
+|   |                      |                      | sends <EOT> <CR>     |
+|   |                      |                      | meaning there are no |
+|   |                      |                      | more transactions    |
+|   |                      |                      | remaining in this    |
+|   |                      |                      | service.             |
++---+----------------------+----------------------+----------------------+
+|10 |                      | "<Message sequence>  | An optional message  |
+|a  |                      | <CR>"                | may be sent at this  |
+|   |                      |                      | point to indicate    |
+|   |                      |                      | the degree of accep- |
+|   |                      |                      | tability of infor-   |
+|   |                      |                      | mation in all trans- |
+|   |                      |                      | actions received     |
+|   |                      |                      | during the current   |
+|   |                      |                      | interchange.         |
+|   |                      |                      | Although optional,   |
+|   |                      |                      | this message is      |
+|   |                      |                      | highly desirable.    |
++---+----------------------+----------------------+----------------------+
+|10 |                      | "<RS> <CR>"          | An <RS> <CR> should  |
+|b  |                      |                      | be sent at this      |
+|   |                      |                      | point if the paging  |
+|   |                      |                      | central finds any    |
+|   |                      |                      | data <ACK> in step 8 |
+|   |                      |                      | to be unacceptable   |
+|   |                      |                      | because of content   |
+|   |                      |                      | (e.g. an invalid     |
+|   |                      |                      | pager number or a    |
+|   |                      |                      | message field inap-  |
+|   |                      |                      | propriate for the    |
+|   |                      |                      | type of pages, etc.) |
+|   |                      |                      | [2]                  |
++---+----------------------+----------------------+----------------------+
+|10 |                      | "<ESC> <EOT> <CR>"   | <ESC> <EOT> = begin  |
+|c  |                      |                      | disconnect.          |
+|   |                      | followed by dropping |                      |
+|   |                      | of carrier and       |                      |
+|   |                      | hanging up.          |                      |
++---+----------------------+----------------------+----------------------+
+|11 | Drops carrier and    |                      |                      |
+|   | hangs up.            |                      |                      |
++---+----------------------+----------------------+----------------------+
+ [2] It is desirable to catch all types of errors in step 8, but
+     practically, some systems will be too slow to catch content
+     errors as they happen.
+ 
+Table 7-1 (continued) Call Delivery Sequence
+ 
+Manual Entry procedure
+ 
+    +----------------------+----------------------+----------------------+
+    | REM. ENTRY DEV. DOES | PAGING CENTRAL DOES  | COMMENTS             |
++---+----------------------+----------------------+----------------------+
+| 5 | (For manual remote   |                      | Lack of <ESC> at     |
+| M | entry as opposed to  |                      | at beginning of      |
+|   | Automatic Entry      |                      | response to ID=      |
+|   | shown previously in  |                      | signifies manual     |
+|   | this table under 5A) |                      | operation where      |
+|   |                      |                      | applicable.          |
+|   | "M <CR>"             |                      |                      |
++---+----------------------+----------------------+----------------------+
+|   |                      | "Enter pager ID(s):  | Any manual operation |
+|   |                      | (Tone only or        | is user defined      |
+|   |                      | voice)"           or | after logon.         |
++---+----------------------+----------------------+----------------------+
+|   | e.g.                 |                      | Echo transmission is |
+|   | "1000 2000 1247 400  |                      | allowed after manual |
+|   | <CR>"                |                      | conversation is      |
++---+----------------------+----------------------+ established. M <CR>  |
+|   |                      | "Enter Alphanumeric  | can be replaced by   |
+|   |                      | message (alpha):" or | any non-null         |
+|   |                      | "Enter Numeric       | sequence ending in   |
+|   |                      | message (numeric):"  | <CR> and not         |
++---+----------------------+----------------------+ beginning with       |
+|   | "Message <CR>"       |                      | <ESC>.               |
++---+----------------------+----------------------+                      |
+|   |                      | "Can't Deliver Page  |                      |
+|   |                      | ID xxxxxx"        or |                      |
+|   |                      | "Too Slow - Good     |                      |
+|   |                      | Bye" (40 second      |                      |
+|   |                      | timeout)          or |                      |
+|   |                      | "Too Many Errors -   |                      |
+|   |                      | Good Bye" (occurs if |                      |
+|   |                      | 3 or more errors) or |                      |
+|   |                      | "Page Blocked"       |                      |
++---+----------------------+----------------------+----------------------+
+ 
+ 
+7.2 Modems
+ 
+For initial implementation of the protocol, it is recommended that Bell
+103 compatible modems be used to receive at 300 baud. Additional speeds or
+modem types may be used if desired.
+ 
+The standard practice will be ASCII with XON, XOFF either direction using
+a 10-bit code (1 start, 7 data, 1 parity, 1 stop) with even parity. {7}
+ 
+In the case of delays, the paging central shall wait at least four seconds
+(eight seconds in steps 3 and 4) before disconnecting the remote entry
+device; the remote entry device shall wait at least ten seconds for a
+character from the central before hanging up.
+ 
+The paging central may, at its option, send <CR><LF> in place of <CR> at
+the end of any sequence.
+ 
+For initial use of the protocol, the paging central shall be equipped to
+receive full duplex using a Bell 103 compatible modem at 300 baud.
+Optionally, certain inputs may be capable of receiving 110 baud Bell 103
+full duplex, 300/1200 baud Bell 212 full duplex. No echo shall be employed
+in full duplex mode. Any attempts at automatic baud rate determination
+shall be within the restraints of the specified protocol.
+ 
+ 
+Example:
+ 
+Leaving a message TEST for customer #1
+Data: 7 Bits/1 Stop Bit/No Even Parity {8}
+ 
+USER                               GL-3000
+ 
+<CR> every 1 second unit ...
+                                   ID=
+<ESC> PG1 <CR>
+                                   <ESC> [p <CR>
+<STX> 1 <CR> TEST <CR> <ETX>
+190 <CR>
+("TEST" is the message)            Processing - Please Wait<CR>
+("190" is the Checksum)            <ACK><CR>
+ 
+                                   +++,,,,,,,,,,ATH0<CR> {9}
+                                   Carrier Drop
+ 
+   Figure 7-2 Example of Typical Command - Acknowledge Sequence
+ 
+ 
+7.3 Telocator Protocol (TAP) Checksum Example {9}
+ 
+The following table shows an example of a complete block containing a
+correct checksum which is: <STX>123<CR>ABC<CR><ETX>17;<CR>
+ 
++-------+---------+---------+
+|  STX  |    000  |   0010  |
+|   1   |    011  |   0001  |
+|   2   |    011  |   0010  |
+|   3   |    011  |   0011  |
+|  CR   |    000  |   1101  |
+|   A   |    100  |   0001  |
+|   B   |    100  |   0010  |
+|   C   |    100  |   0011  |
+|  CR   |    000  |   1101  |
+|  ETX  |    000  |   0011  |
+|       +---------+---------+
+|       | 1 0111  |   1011  |
+|       | 1   7   |     ;   |
++---------+---------+---------+
+  Checksum = 17;
+ 
+ 
+TRANSCRIBER'S FOOTNOTES:
+ 
+{1} It lies. All the way through this document, it lies. BEWARE OF EXTRA
+    SPACES! The only time there should be a space in this protocol is
+    in message sequences or in the user's field 2.
+ 
+{2} Protocol didn't say, "Simon says." Notice that there IS NO <CR> here.
+    The <CR> is way down at the end of the optional password field, in
+    step 6.
+ 
+{3} I have yet to run into a system that used anything OTHER than
+    <ESC>PG1<CR> for the login sequence. But to follow up on what I said
+    in note {2}, if you do find one, it's <ESC>PG1paswrd<CR>, not
+    <ESC>PG1<CR>paswrd<CR>.
+ 
+{4} They take forever to get around to telling you what you most want to
+    know: field 1 is pager ID, field 2 is message. On both of the systems
+    I've tried, pager ID does not work if there is ANY punctuation in it,
+    so strip out those dashes and spaces. I'm told that some systems
+    require eight digits, so it may be safe to zero pad to that length.
+ 
+{5} Field 2 is the message. The rest of transaction 8 goes into gory
+    detail on how to handle message blocks longer than 250 characters,
+    but you probably shouldn't waste your time: most pagers can't handle
+    more than 180. Numeric pagers can typically only handle 12 to 20.
+    On the numeric pagers I tried, zero to nine, space, and dash are the
+    only legal characters.  No, not asterisk, even though that's what key
+    you hit to include an extra dash when you're touch-toning it.
+ 
+{6} They go out of their way to confuse this, and as I said in note {5},
+    even if you do get it to work it probably won't work.  But let me
+    try to break this down into simple rules:
+ 
+    Every packet starts with <STX> and ends with a three-byte checksum
+    and <CR>.
+ 
+    The last character before the checksum is:
+ 
+        IF this the last packet in the transaction THEN
+           it's <ETX>
+        ELSE IF the packet ends on a boundary between fields,
+                that is to say, with a <CR>, THEN
+           it's <US>
+        ELSE
+           it's <ETB>
+        END IF
+ 
+    How do you know whether or not to break a field across more than one
+    packet?  The easy way is to build the whole transaction, break it into
+    250 byte chunks, look at the end of each chunk for a <CR>.  If you
+    find the <CR>, send <ETB>, else <US>.  After the last packet, send
+    <ETX> instead.
+ 
+{7} Who ever heard of calling this a ten-bit code?  Here's what they mean:
+    300 bps, 7 bits, even parity, 1 stop bit.  They mean it, too; neither
+    of the ones I've tried would sync at above 1200 bps.
+ 
+{8} Egregious typo. I fixed some others, but this is too weird. I THINK
+    they mean even parity; maybe they mean it works with either even or
+    no parity.
+ 
+{9} Their example almost clears it up, but maybe a code example will help
+    more.  The following HyperTalk code was what I wrote to calculate the
+    checksum and put it onto the end of a packet:
+ 
+    repeat with i = 1 to the length of TempPacket
+       add charToNum(char i of TempPacket) to checkSum
+    end repeat
+    put numToChar((checkSum div 256) mod 16 + 48) into checkSumString
+    put numToChar((checkSum div 16) mod 16 + 48) after checkSumString
+    put numToChar(checkSum mod 16 + 48) after checkSumString
+    put checkSumString & CR after TempPacket
+
+
+

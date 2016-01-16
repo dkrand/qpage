@@ -1,0 +1,154 @@
+
+	Installation instructions for QuickPage v3.3:
+	---------------------------------------------
+
+1) Make sure you have the latest version.  The latest version of QuickPage
+   can be found at http://www.qpage.org/.
+
+2) Edit config.input as appropriate and type "./configure" in this
+   directory.
+
+3) Type "make" to build the QuickPage binary, or type "make client" for a
+   stripped down client-only version.
+
+4) Install qpage and qpage.man in appropriate directories.
+
+5) Create a run-time configuration file.  See the man page for complete
+   details on the syntax of this file.
+
+6) Edit the appropriate system startup file to start a QuickPage daemon
+   process when the system boots.
+
+7) Send e-mail to tomiii@qpage.org telling me how you like QuickPage!  :-)
+
+
+**********************************************************************
+
+
+	How to use the "tcp_wrappers" package with QuickPage:
+	-----------------------------------------------------
+
+QuickPage has builtin support for Wietse Venema's "tcp_wrappers" package.
+If you don't know what this means, forget about it and skip to the next
+section.  The "configure" script in this directory automatically checks
+for the presence of tcpd.h and libwrap.a on your system and will make
+appropriate changes to QuickPage's Makefile if they are found.  However,
+as Tony Dal Santo likes to say, "There is no magic."  You might need to
+give the configure script a little help.  It will try to compile and link
+this program:
+
+    #include "tcpd.h"
+    int main()
+    {
+        request_init(0);
+        return(0);
+    }
+
+In doing so, it will look for tcpd.h and libwrap.a in a variety of places
+including those specified by --includedir and --libdir (respectively) and
+in the current directory.  If this program compiles and links successfully,
+QuickPage will be configured for tcp_wrapper support.  If "configure"
+cannot find both tcpd.h and libwrap.a then you have three options:
+
+    1) copy those files to this directory and rerun "./configure"
+
+    2) run "./configure" with appropriate --includedir and --libdir
+       options
+
+    3) You didn't really want to use tcp_wrappers, did you?
+
+If you have trouble, please send e-mail to tomiii@qpage.org explaining
+your problem.
+
+
+**********************************************************************
+
+
+	How to integrate QuickPage into your e-mail system:
+	---------------------------------------------------
+
+There are many ways to integrate QuickPage into your e-mail system.  None
+of them require running a QuickPage daemon on your mail server.  Two
+common methods of using QuickPage via e-mail without requiring changes
+to sendmail.cf are:
+
+1) Create aliases for each user, such as:
+
+	<user>-page: "|/usr/local/bin/qpage -l 0 -m -p <user>"
+
+   Sending messages to <user>-page will result in the message being
+   forwarded to the user's pager.
+
+2) Install the procmail package from ftp.informatik.rwth-aachen.de.
+   Procmail can either be installed as the sendmail local delivery
+   agent (preferred) or simply executed from the user's .forward file.
+   If you're using a recent version of sendmail, no user aliases are
+   required.  Versions of sendmail 8.x or later will accept usernames
+   containing a plus sign and will deliver them as though the username
+   were truncated at the plus sign (it's actually more complicated
+   than this--see the Sendmail book mentioned above for complete details).
+   For example, sending a message to "tomiii+page@some.domain.name" will
+   result in the message going to tomiii's mailbox.  If this doesn't
+   work on your system, you will need to create aliases such as:
+
+	<user>-page: <user>
+
+   The following rule in /etc/procmailrc (or .procmailrc in the user's
+   home directory) should work nicely with QuickPage:
+
+	:0c
+	* ^To: .*[+-]page@
+	|/usr/local/bin/qpage -l 0 -m -p $LOGNAME
+
+   This procmail rule will check for a "To:" line that contains a
+   username ending with "-page" or "+page" and will invoke qpage to
+   handle such messages.  The 'c' in the first line causes procmail to
+   also deliver the e-mail message to the user's mailbox in case the
+   user's pager is turned off.  The "-l 0" option causes the QuickPage
+   daemon to send an e-mail reply containing status information about
+   the page to the original sender.  Consult the procmail documentation
+   for more information.
+
+
+QuickPage can also be installed as a sendmail delivery agent.  To do
+this requires modifying /etc/sendmail.cf (or /etc/mail/sendmail.cf on
+some systems) and should not be attempted without understanding how
+sendmail works.  Explaining the syntax requirements of sendmail.cf is
+beyond the scope of this document.  However, the O'Reilly "Sendmail"
+book (also known as the Bat book) is an excellent reference.  It
+contains a wealth of information about sendmail and shows specific
+examples on how to modify the sendmail configuration file for programs
+such as QuickPage.  For those of you who already understand the details
+of sendmail.cf, keep reading; otherwise, stop here and go get yourself
+a sendmail book.
+
+If you intend to use QuickPage as a sendmail delivery agent, you'll
+need to and create a new mailer definition in sendmail.cf.  Insert the
+following line somewhere near the local mailer definition (typically
+called Mlocal in most configuration files):
+
+    Mqpage, P=/usr/local/bin/qpage, F=lmsDF, A=qpage -l0 -m -P$u
+
+Note that when using the 'm' flag in the F= portion of the mailer
+definition, you'll probably want to use -P instead of -p in the
+argument list so that any -a, -c, or -l options you specify will
+apply to all recipients.
+
+Now you need to modify ruleset 0 to use this new mailer definition.
+The specifics are left for you to decide.  This can be as simple
+or as complicated as you want to make it.  One possibility would
+be to add rules such as:
+
+    # send local pages to the QuickPage mailer
+    R$+.page			$#qpage $: $1
+    R$+.page<@$=w>$*		$#qpage $: $1
+
+With these rules and the mailer definition above, a message sent to
+user.page or user.page@your.domain.name would cause sendmail to forward
+the message to the user's pager by executing the command:
+
+    /usr/local/bin/qpage -l0 -m -Puser
+
+It would be wise to save a backup copy of your existing sendmail.cf
+before attempting to make any changes.
+
