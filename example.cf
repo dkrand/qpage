@@ -78,6 +78,10 @@ service=default
 	maxtries=6
 	phone=5551212
 
+service=tapgateway
+	parity=even
+	phone=17022166140
+	
 service=supercom
 	phone=482-9768
 
